@@ -1,0 +1,899 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NEFER — Маркетплейс Красоты</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;500;600;700&family=Montserrat:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<style>
+:root {
+    --primary: #8B5CF6;
+    --primary-light: #A78BFA;
+    --primary-dark: #7C3AED;
+    --primary-glow: rgba(139, 92, 246, 0.3);
+    --secondary: #EC4899;
+    --secondary-light: #F472B6;
+    --accent: #F59E0B;
+    --success: #10B981;
+    --danger: #EF4444;
+    --bg-dark: #0F0B1A;
+    --bg-card: #1A1528;
+    --bg-card-hover: #221D33;
+    --bg-surface: #15112B;
+    --bg-input: #1E1933;
+    --text-primary: #F8F7FF;
+    --text-secondary: #A0A0B8;
+    --text-muted: #6B6B80;
+    --border: rgba(139, 92, 246, 0.15);
+    --border-hover: rgba(139, 92, 246, 0.3);
+    --gradient-primary: linear-gradient(135deg, #8B5CF6, #EC4899);
+    --gradient-hero: linear-gradient(135deg, #0F0B1A 0%, #1A1040 50%, #15112B 100%);
+    --gradient-card: linear-gradient(135deg, rgba(139, 92, 246, 0.1), rgba(236, 72, 153, 0.05));
+    --gradient-text: linear-gradient(135deg, #8B5CF6, #EC4899, #F59E0B);
+    --shadow-sm: 0 2px 8px rgba(0,0,0,0.3);
+    --shadow-md: 0 4px 20px rgba(0,0,0,0.4);
+    --shadow-lg: 0 8px 40px rgba(0,0,0,0.5);
+    --shadow-glow: 0 0 30px rgba(139, 92, 246, 0.2);
+    --radius-sm: 8px;
+    --radius-md: 12px;
+    --radius-lg: 20px;
+    --radius-xl: 28px;
+    --radius-full: 999px;
+    --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    --font-display: 'Cormorant Garamond', serif;
+    --font-body: 'Montserrat', sans-serif;
+    --font-ui: 'Inter', sans-serif;
+}
+
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+html { scroll-behavior: smooth; scroll-padding-top: 80px; }
+body { font-family: var(--font-body); background-color: var(--bg-dark); color: var(--text-primary); line-height: 1.6; overflow-x: hidden; -webkit-font-smoothing: antialiased; }
+a { text-decoration: none; color: inherit; transition: var(--transition); }
+img { max-width: 100%; display: block; }
+button { cursor: pointer; border: none; outline: none; font-family: var(--font-ui); transition: var(--transition); }
+input, textarea { outline: none; border: none; font-family: var(--font-ui); }
+.container { max-width: 1280px; margin: 0 auto; padding: 0 20px; }
+.hidden { display: none !important; }
+.mt-10 { margin-top: 10px; }
+.text-gradient { background: var(--gradient-text); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+
+.preloader { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: var(--bg-dark); z-index: 10000; display: flex; align-items: center; justify-content: center; transition: opacity 0.5s, visibility 0.5s; }
+.preloader.hidden { opacity: 0; visibility: hidden; }
+.preloader-inner { text-align: center; }
+.preloader-logo { font-family: var(--font-display); font-size: 3rem; font-weight: 700; background: var(--gradient-primary); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin-bottom: 30px; letter-spacing: 8px; animation: preloaderPulse 1.5s ease-in-out infinite; }
+@keyframes preloaderPulse { 0%, 100% { opacity: 0.5; transform: scale(0.98); } 50% { opacity: 1; transform: scale(1.02); } }
+.preloader-bar { width: 200px; height: 3px; background: var(--bg-card); border-radius: var(--radius-full); overflow: hidden; }
+.preloader-progress { height: 100%; background: var(--gradient-primary); border-radius: var(--radius-full); animation: preloaderBar 1.5s ease forwards; }
+@keyframes preloaderBar { from { width: 0; } to { width: 100%; } }
+
+.header { position: fixed; top: 0; left: 0; width: 100%; z-index: 1000; background: rgba(15, 11, 26, 0.8); backdrop-filter: blur(20px); border-bottom: 1px solid var(--border); transition: var(--transition); }
+.header.scrolled { background: rgba(15, 11, 26, 0.95); box-shadow: var(--shadow-md); }
+.header-inner { display: flex; align-items: center; justify-content: space-between; height: 72px; }
+.logo { display: flex; align-items: center; gap: 8px; }
+.logo-icon { font-size: 1.5rem; }
+.logo-text { font-family: var(--font-display); font-size: 1.6rem; font-weight: 700; letter-spacing: 4px; background: var(--gradient-primary); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+.nav { display: flex; gap: 8px; }
+.nav-link { padding: 8px 16px; border-radius: var(--radius-full); font-size: 0.875rem; font-weight: 500; color: var(--text-secondary); position: relative; font-family: var(--font-ui); }
+.nav-link:hover, .nav-link.active { color: var(--text-primary); background: rgba(139, 92, 246, 0.1); }
+.nav-link.active::after { content: ''; position: absolute; bottom: 2px; left: 50%; transform: translateX(-50%); width: 20px; height: 2px; background: var(--gradient-primary); border-radius: var(--radius-full); }
+.header-actions { display: flex; align-items: center; gap: 12px; }
+.btn-search { width: 40px; height: 40px; border-radius: var(--radius-full); background: var(--bg-card); color: var(--text-secondary); display: flex; align-items: center; justify-content: center; border: 1px solid var(--border); }
+.btn-search:hover { border-color: var(--primary); color: var(--primary); }
+.btn-burger { display: none; flex-direction: column; gap: 5px; width: 40px; height: 40px; align-items: center; justify-content: center; background: transparent; }
+.btn-burger span { display: block; width: 22px; height: 2px; background: var(--text-primary); border-radius: 2px; transition: var(--transition); }
+
+.search-bar { height: 0; overflow: hidden; transition: var(--transition); border-top: 1px solid transparent; }
+.search-bar.active { height: auto; padding: 16px 0; border-top-color: var(--border); }
+.search-inner { display: flex; align-items: center; gap: 12px; background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 12px 20px; }
+.search-inner i { color: var(--text-muted); }
+.search-inner input { flex: 1; background: transparent; color: var(--text-primary); font-size: 1rem; }
+.search-inner input::placeholder { color: var(--text-muted); }
+.search-close { background: transparent; color: var(--text-muted); font-size: 1.1rem; }
+.search-close:hover { color: var(--text-primary); }
+.search-tags { display: flex; gap: 8px; margin-top: 12px; flex-wrap: wrap; }
+.search-tag { padding: 6px 14px; background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-full); font-size: 0.8rem; color: var(--text-secondary); cursor: pointer; transition: var(--transition); }
+.search-tag:hover { border-color: var(--primary); color: var(--primary); background: rgba(139, 92, 246, 0.1); }
+
+.mobile-menu { position: fixed; top: 0; right: -100%; width: 300px; height: 100%; background: var(--bg-surface); z-index: 2000; padding: 20px; transition: right 0.4s cubic-bezier(0.4, 0, 0.2, 1); display: flex; flex-direction: column; }
+.mobile-menu.active { right: 0; }
+.mobile-menu-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 30px; }
+.mobile-close { background: transparent; color: var(--text-secondary); font-size: 1.3rem; }
+.mobile-nav { display: flex; flex-direction: column; gap: 4px; flex: 1; }
+.mobile-nav-link { display: flex; align-items: center; gap: 12px; padding: 14px 16px; border-radius: var(--radius-md); font-size: 1rem; color: var(--text-secondary); }
+.mobile-nav-link:hover, .mobile-nav-link.active { background: rgba(139, 92, 246, 0.1); color: var(--text-primary); }
+.mobile-nav-link i { width: 20px; text-align: center; color: var(--primary); }
+.mobile-menu-footer { padding-top: 20px; border-top: 1px solid var(--border); }
+.mobile-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); z-index: 1999; opacity: 0; visibility: hidden; transition: var(--transition); }
+.mobile-overlay.active { opacity: 1; visibility: visible; }
+
+.btn-primary { display: inline-flex; align-items: center; gap: 8px; padding: 12px 24px; background: var(--gradient-primary); color: white; font-weight: 600; font-size: 0.9rem; border-radius: var(--radius-full); position: relative; overflow: hidden; z-index: 1; }
+.btn-primary::before { content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(135deg, #7C3AED, #DB2777); opacity: 0; transition: var(--transition); z-index: -1; }
+.btn-primary:hover::before { opacity: 1; }
+.btn-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 25px var(--primary-glow); }
+.btn-outline { display: inline-flex; align-items: center; gap: 8px; padding: 12px 24px; background: transparent; color: var(--primary-light); font-weight: 600; font-size: 0.9rem; border-radius: var(--radius-full); border: 1px solid var(--primary); }
+.btn-outline:hover { background: rgba(139, 92, 246, 0.1); transform: translateY(-2px); }
+.btn-sm { padding: 8px 18px; font-size: 0.825rem; }
+.btn-lg { padding: 16px 36px; font-size: 1rem; }
+.btn-block { width: 100%; justify-content: center; }
+
+.hero { min-height: 100vh; display: flex; align-items: center; justify-content: center; position: relative; overflow: hidden; padding: 120px 0 80px; }
+.hero-bg { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 0; }
+.hero-gradient { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: var(--gradient-hero); }
+.hero-gradient::before { content: ''; position: absolute; top: 20%; left: 10%; width: 400px; height: 400px; background: radial-gradient(circle, rgba(139, 92, 246, 0.15), transparent 70%); border-radius: 50%; animation: float 8s ease-in-out infinite; }
+.hero-gradient::after { content: ''; position: absolute; bottom: 20%; right: 10%; width: 350px; height: 350px; background: radial-gradient(circle, rgba(236, 72, 153, 0.12), transparent 70%); border-radius: 50%; animation: float 10s ease-in-out infinite reverse; }
+@keyframes float { 0%, 100% { transform: translateY(0) scale(1); } 50% { transform: translateY(-30px) scale(1.05); } }
+.hero-particles { position: absolute; top: 0; left: 0; width: 100%; height: 100%; }
+.particle { position: absolute; width: 4px; height: 4px; background: var(--primary); border-radius: 50%; opacity: 0; animation: particleFloat linear infinite; }
+@keyframes particleFloat { 0% { opacity: 0; transform: translateY(100vh) scale(0); } 10% { opacity: 0.6; } 90% { opacity: 0.6; } 100% { opacity: 0; transform: translateY(-100px) scale(1); } }
+.hero-content { text-align: center; position: relative; z-index: 2; max-width: 800px; margin: 0 auto; }
+.hero-badge { display: inline-flex; align-items: center; gap: 8px; padding: 8px 20px; background: rgba(139, 92, 246, 0.1); border: 1px solid var(--border); border-radius: var(--radius-full); font-size: 0.85rem; color: var(--primary-light); margin-bottom: 30px; animation: fadeInDown 0.8s ease; }
+.hero-title { font-family: var(--font-display); font-size: clamp(3rem, 7vw, 5.5rem); font-weight: 700; line-height: 1.1; margin-bottom: 24px; animation: fadeInUp 0.8s ease 0.2s both; }
+.title-line { display: block; }
+.title-accent { font-style: italic; font-weight: 300; }
+.hero-subtitle { font-size: 1.15rem; color: var(--text-secondary); max-width: 500px; margin: 0 auto 40px; animation: fadeInUp 0.8s ease 0.4s both; }
+.hero-search { animation: fadeInUp 0.8s ease 0.6s both; margin-bottom: 50px; }
+.hero-search-inner { display: flex; background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-xl); padding: 6px; max-width: 680px; margin: 0 auto; box-shadow: var(--shadow-lg); }
+.search-field { display: flex; align-items: center; gap: 10px; padding: 12px 20px; flex: 1; }
+.search-field i { color: var(--text-muted); font-size: 0.9rem; }
+.search-field input { background: transparent; color: var(--text-primary); font-size: 0.95rem; width: 100%; }
+.search-field input::placeholder { color: var(--text-muted); }
+.search-location { border-left: 1px solid var(--border); }
+.btn-search-hero { padding: 12px 28px; border-radius: var(--radius-lg); flex-shrink: 0; }
+.hero-stats { display: flex; justify-content: center; gap: 50px; animation: fadeInUp 0.8s ease 0.8s both; }
+.stat-item { text-align: center; }
+.stat-number { display: block; font-family: var(--font-display); font-size: 2.2rem; font-weight: 700; background: var(--gradient-primary); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+.stat-label { font-size: 0.8rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; }
+.hero-scroll { position: absolute; bottom: 30px; left: 50%; transform: translateX(-50%); z-index: 2; }
+.scroll-indicator { display: flex; flex-direction: column; align-items: center; gap: 8px; color: var(--text-muted); font-size: 0.75rem; animation: bounceDown 2s ease-in-out infinite; }
+@keyframes bounceDown { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(8px); } }
+@keyframes fadeInUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+@keyframes fadeInDown { from { opacity: 0; transform: translateY(-20px); } to { opacity: 1; transform: translateY(0); } }
+
+section { padding: 100px 0; }
+.section-header { text-align: center; margin-bottom: 60px; }
+.section-badge { display: inline-block; padding: 6px 16px; background: rgba(139, 92, 246, 0.1); border: 1px solid var(--border); border-radius: var(--radius-full); font-size: 0.8rem; color: var(--primary-light); margin-bottom: 16px; font-family: var(--font-ui); text-transform: uppercase; letter-spacing: 2px; }
+.section-title { font-family: var(--font-display); font-size: clamp(2rem, 4vw, 3rem); font-weight: 700; margin-bottom: 16px; }
+.section-subtitle { color: var(--text-secondary); font-size: 1.05rem; max-width: 500px; margin: 0 auto; }
+.section-footer { text-align: center; margin-top: 50px; }
+.subsection-title { font-family: var(--font-display); font-size: 1.8rem; font-weight: 600; margin-bottom: 30px; text-align: center; }
+
+.categories { background: var(--bg-surface); }
+.categories-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; }
+.category-card { background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 30px 24px; text-align: center; cursor: pointer; transition: var(--transition); position: relative; overflow: hidden; }
+.category-card::before { content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: var(--gradient-card); opacity: 0; transition: var(--transition); }
+.category-card:hover { transform: translateY(-8px); border-color: var(--border-hover); box-shadow: var(--shadow-glow); }
+.category-card:hover::before { opacity: 1; }
+.category-icon { width: 64px; height: 64px; border-radius: var(--radius-lg); background: rgba(139, 92, 246, 0.1); display: flex; align-items: center; justify-content: center; font-size: 1.5rem; color: var(--primary-light); margin: 0 auto 16px; position: relative; transition: var(--transition); }
+.category-card:hover .category-icon { background: var(--gradient-primary); color: white; transform: scale(1.1); }
+.category-card h3 { font-family: var(--font-body); font-size: 1.05rem; font-weight: 600; margin-bottom: 8px; position: relative; }
+.category-card p { font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 12px; position: relative; }
+.category-count { font-size: 0.75rem; color: var(--primary-light); font-weight: 500; position: relative; }
+
+.masters-filters, .feed-filters { display: flex; gap: 8px; justify-content: center; margin-bottom: 40px; flex-wrap: wrap; }
+.filter-btn { padding: 10px 20px; background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-full); color: var(--text-secondary); font-size: 0.85rem; font-weight: 500; }
+.filter-btn:hover { border-color: var(--primary); color: var(--primary-light); }
+.filter-btn.active { background: var(--gradient-primary); border-color: transparent; color: white; }
+
+.masters-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
+.master-card { background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-lg); overflow: hidden; transition: var(--transition); cursor: pointer; }
+.master-card:hover { transform: translateY(-6px); border-color: var(--border-hover); box-shadow: var(--shadow-glow); }
+.master-cover { position: relative; height: 200px; overflow: hidden; }
+.master-cover-img { width: 100%; height: 100%; object-fit: cover; background: var(--gradient-card); display: flex; align-items: center; justify-content: center; font-size: 3rem; }
+.master-badge-verified { position: absolute; top: 12px; right: 12px; background: var(--success); color: white; width: 28px; height: 28px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 0.75rem; }
+.master-badge-top { position: absolute; top: 12px; left: 12px; background: var(--gradient-primary); color: white; padding: 4px 12px; border-radius: var(--radius-full); font-size: 0.7rem; font-weight: 600; }
+.master-avatar { width: 72px; height: 72px; border-radius: 50%; border: 3px solid var(--bg-card); position: absolute; bottom: -36px; left: 24px; overflow: hidden; background: var(--gradient-primary); display: flex; align-items: center; justify-content: center; font-size: 1.5rem; color: white; font-weight: 600; }
+.master-info { padding: 44px 24px 20px; }
+.master-name { font-size: 1.1rem; font-weight: 600; margin-bottom: 4px; }
+.master-specialty { font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 12px; }
+.master-meta { display: flex; align-items: center; gap: 16px; margin-bottom: 16px; }
+.master-rating { display: flex; align-items: center; gap: 4px; font-size: 0.85rem; }
+.master-rating i { color: var(--accent); font-size: 0.8rem; }
+.master-rating span { font-weight: 600; }
+.master-reviews-count { font-size: 0.8rem; color: var(--text-muted); }
+.master-location { font-size: 0.8rem; color: var(--text-muted); }
+.master-location i { color: var(--secondary); margin-right: 4px; }
+.master-tags { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 16px; }
+.master-tag { padding: 4px 10px; background: rgba(139, 92, 246, 0.1); border-radius: var(--radius-full); font-size: 0.7rem; color: var(--primary-light); }
+.master-actions { display: flex; gap: 10px; }
+.master-actions .btn-primary { flex: 1; justify-content: center; padding: 10px; font-size: 0.85rem; }
+.master-actions .btn-outline { padding: 10px 16px; font-size: 0.85rem; }
+
+.feed-section { background: var(--bg-surface); }
+.feed-masonry { columns: 3; column-gap: 20px; }
+.feed-item { break-inside: avoid; margin-bottom: 20px; background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-lg); overflow: hidden; cursor: pointer; transition: var(--transition); }
+.feed-item:hover { transform: translateY(-4px); border-color: var(--border-hover); box-shadow: var(--shadow-glow); }
+.feed-image { width: 100%; min-height: 200px; max-height: 400px; background: var(--gradient-card); display: flex; align-items: center; justify-content: center; font-size: 4rem; }
+.feed-content { padding: 16px; }
+.feed-author { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
+.feed-author-avatar { width: 36px; height: 36px; border-radius: 50%; background: var(--gradient-primary); display: flex; align-items: center; justify-content: center; font-size: 0.8rem; color: white; font-weight: 600; }
+.feed-author-name { font-size: 0.85rem; font-weight: 600; }
+.feed-author-time { font-size: 0.75rem; color: var(--text-muted); }
+.feed-description { font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 12px; line-height: 1.5; }
+.feed-stats { display: flex; align-items: center; gap: 16px; }
+.feed-stat { display: flex; align-items: center; gap: 6px; font-size: 0.8rem; color: var(--text-muted); cursor: pointer; transition: var(--transition); }
+.feed-stat:hover { color: var(--primary-light); }
+.feed-stat.liked i { color: var(--secondary); }
+.feed-tags { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 10px; }
+.feed-tag { font-size: 0.7rem; color: var(--primary-light); background: rgba(139, 92, 246, 0.1); padding: 3px 8px; border-radius: var(--radius-full); }
+
+.steps-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 30px; margin-bottom: 80px; }
+.step-card { text-align: center; padding: 40px 30px; background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-lg); position: relative; transition: var(--transition); }
+.step-card:hover { transform: translateY(-6px); border-color: var(--border-hover); box-shadow: var(--shadow-glow); }
+.step-number { position: absolute; top: 16px; right: 20px; font-family: var(--font-display); font-size: 3rem; font-weight: 700; color: rgba(139, 92, 246, 0.1); line-height: 1; }
+.step-icon { width: 72px; height: 72px; border-radius: var(--radius-lg); background: var(--gradient-primary); display: flex; align-items: center; justify-content: center; font-size: 1.5rem; color: white; margin: 0 auto 20px; }
+.step-card h3 { font-size: 1.15rem; font-weight: 600; margin-bottom: 10px; }
+.step-card p { font-size: 0.9rem; color: var(--text-secondary); line-height: 1.6; }
+
+.services-list { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; }
+.service-item { display: flex; align-items: center; justify-content: space-between; padding: 20px 24px; background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-md); transition: var(--transition); cursor: pointer; }
+.service-item:hover { border-color: var(--border-hover); background: var(--bg-card-hover); }
+.service-info { display: flex; align-items: center; gap: 16px; }
+.service-icon { width: 48px; height: 48px; border-radius: var(--radius-md); background: rgba(139, 92, 246, 0.1); display: flex; align-items: center; justify-content: center; font-size: 1.2rem; }
+.service-name { font-weight: 600; font-size: 0.95rem; margin-bottom: 4px; }
+.service-duration { font-size: 0.8rem; color: var(--text-muted); }
+.service-price { font-family: var(--font-display); font-size: 1.3rem; font-weight: 700; background: var(--gradient-primary); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+
+.nearby-content { display: grid; grid-template-columns: 1.5fr 1fr; gap: 30px; align-items: start; }
+.map-container { border-radius: var(--radius-lg); overflow: hidden; border: 1px solid var(--border); background: var(--bg-card); }
+.map-placeholder { position: relative; height: 500px; display: flex; align-items: center; justify-content: center; }
+.map-mock { width: 100%; height: 100%; background: radial-gradient(circle at 30% 40%, rgba(139, 92, 246, 0.05) 0%, transparent 50%), radial-gradient(circle at 70% 60%, rgba(236, 72, 153, 0.05) 0%, transparent 50%), linear-gradient(135deg, var(--bg-card) 0%, var(--bg-surface) 100%); position: relative; overflow: hidden; }
+.map-mock::before { content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 100%; background-image: linear-gradient(rgba(139, 92, 246, 0.05) 1px, transparent 1px), linear-gradient(90deg, rgba(139, 92, 246, 0.05) 1px, transparent 1px); background-size: 50px 50px; }
+.map-pin { position: absolute; cursor: pointer; z-index: 2; transition: var(--transition); }
+.map-pin:hover { transform: scale(1.2); z-index: 3; }
+.pin-avatar { width: 40px; height: 40px; border-radius: 50%; background: var(--gradient-primary); display: flex; align-items: center; justify-content: center; color: white; font-weight: 600; font-size: 0.85rem; border: 2px solid white; box-shadow: var(--shadow-md); }
+.pin-pulse { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 40px; height: 40px; border-radius: 50%; background: rgba(139, 92, 246, 0.3); animation: pinPulse 2s ease-in-out infinite; z-index: -1; }
+@keyframes pinPulse { 0% { transform: translate(-50%, -50%) scale(1); opacity: 0.6; } 100% { transform: translate(-50%, -50%) scale(2.5); opacity: 0; } }
+.map-center-user { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); text-align: center; color: var(--secondary); }
+.map-center-user i { font-size: 2rem; display: block; margin-bottom: 4px; }
+.map-center-user span { font-size: 0.7rem; font-weight: 600; }
+.user-radius { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 150px; height: 150px; border: 2px dashed rgba(236, 72, 153, 0.2); border-radius: 50%; z-index: -1; }
+.btn-locate { position: absolute; bottom: 20px; left: 50%; transform: translateX(-50%); z-index: 5; white-space: nowrap; }
+.nearby-list { display: flex; flex-direction: column; gap: 12px; max-height: 500px; overflow-y: auto; padding-right: 8px; }
+.nearby-list::-webkit-scrollbar { width: 4px; }
+.nearby-list::-webkit-scrollbar-track { background: var(--bg-card); border-radius: 2px; }
+.nearby-list::-webkit-scrollbar-thumb { background: var(--primary); border-radius: 2px; }
+.nearby-card { display: flex; gap: 14px; padding: 16px; background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-md); cursor: pointer; transition: var(--transition); }
+.nearby-card:hover { border-color: var(--border-hover); background: var(--bg-card-hover); }
+.nearby-avatar { width: 52px; height: 52px; border-radius: 50%; background: var(--gradient-primary); display: flex; align-items: center; justify-content: center; color: white; font-weight: 600; font-size: 1rem; flex-shrink: 0; }
+.nearby-info { flex: 1; min-width: 0; }
+.nearby-name { font-weight: 600; font-size: 0.95rem; margin-bottom: 2px; }
+.nearby-specialty { font-size: 0.8rem; color: var(--text-secondary); margin-bottom: 6px; }
+.nearby-distance { font-size: 0.75rem; color: var(--primary-light); }
+.nearby-distance i { margin-right: 4px; }
+.nearby-rating { display: flex; align-items: center; gap: 4px; font-size: 0.8rem; color: var(--accent); flex-shrink: 0; align-self: flex-start; }
+
+.reviews-slider { overflow: hidden; margin-bottom: 30px; }
+.reviews-track { display: flex; gap: 24px; transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1); }
+.review-card { min-width: calc(33.333% - 16px); background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 30px; flex-shrink: 0; }
+.review-stars { display: flex; gap: 4px; margin-bottom: 16px; }
+.review-stars i { color: var(--accent); font-size: 0.9rem; }
+.review-text { font-size: 0.95rem; color: var(--text-secondary); line-height: 1.7; margin-bottom: 20px; font-style: italic; }
+.review-author { display: flex; align-items: center; gap: 12px; }
+.review-author-avatar { width: 44px; height: 44px; border-radius: 50%; background: var(--gradient-primary); display: flex; align-items: center; justify-content: center; color: white; font-weight: 600; }
+.review-author-name { font-weight: 600; font-size: 0.9rem; }
+.review-author-service { font-size: 0.8rem; color: var(--text-muted); }
+.reviews-controls { display: flex; align-items: center; justify-content: center; gap: 20px; }
+.review-arrow { width: 44px; height: 44px; border-radius: 50%; background: var(--bg-card); border: 1px solid var(--border); color: var(--text-secondary); display: flex; align-items: center; justify-content: center; }
+.review-arrow:hover { border-color: var(--primary); color: var(--primary); }
+.reviews-dots { display: flex; gap: 8px; }
+.review-dot { width: 10px; height: 10px; border-radius: 50%; background: var(--bg-card); border: 1px solid var(--border); cursor: pointer; transition: var(--transition); }
+.review-dot.active { background: var(--primary); border-color: var(--primary); width: 30px; border-radius: var(--radius-full); }
+
+.cta-section { padding: 100px 0; background: var(--bg-surface); }
+.cta-card { display: grid; grid-template-columns: 1fr 1fr; gap: 60px; align-items: center; background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-xl); padding: 60px; position: relative; overflow: hidden; }
+.cta-card::before { content: ''; position: absolute; top: -50%; right: -20%; width: 400px; height: 400px; background: radial-gradient(circle, rgba(139, 92, 246, 0.08), transparent 70%); border-radius: 50%; }
+.cta-badge { display: inline-block; padding: 6px 16px; background: rgba(139, 92, 246, 0.1); border: 1px solid var(--border); border-radius: var(--radius-full); font-size: 0.8rem; color: var(--primary-light); margin-bottom: 16px; text-transform: uppercase; letter-spacing: 2px; }
+.cta-content h2 { font-family: var(--font-display); font-size: 2.5rem; font-weight: 700; margin-bottom: 16px; }
+.cta-content p { color: var(--text-secondary); margin-bottom: 24px; font-size: 1rem; line-height: 1.7; }
+.cta-features { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; margin-bottom: 30px; }
+.cta-feature { display: flex; align-items: center; gap: 8px; font-size: 0.9rem; }
+.cta-feature i { color: var(--success); }
+.cta-visual { display: flex; justify-content: center; position: relative; }
+.cta-phone { width: 280px; background: var(--bg-dark); border: 2px solid var(--border); border-radius: 32px; padding: 12px; box-shadow: var(--shadow-lg); position: relative; }
+.cta-phone::before { content: ''; position: absolute; top: 12px; left: 50%; transform: translateX(-50%); width: 80px; height: 24px; background: var(--bg-dark); border-radius: 0 0 12px 12px; border: 1px solid var(--border); border-top: none; z-index: 2; }
+.phone-screen { background: var(--bg-surface); border-radius: 22px; padding: 40px 16px 16px; min-height: 400px; }
+.phone-header-mock { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; padding-bottom: 12px; border-bottom: 1px solid var(--border); }
+.phone-logo { font-family: var(--font-display); font-weight: 700; font-size: 1rem; background: var(--gradient-primary); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+.phone-status { font-size: 0.7rem; color: var(--success); background: rgba(16, 185, 129, 0.1); padding: 3px 8px; border-radius: var(--radius-full); }
+.phone-stats-mock { display: flex; gap: 12px; margin-bottom: 20px; }
+.phone-stat { flex: 1; text-align: center; padding: 12px 8px; background: var(--bg-card); border-radius: var(--radius-md); }
+.phone-stat strong { display: block; font-size: 1.2rem; background: var(--gradient-primary); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+.phone-stat span { font-size: 0.65rem; color: var(--text-muted); }
+.phone-calendar-mock { display: flex; flex-direction: column; gap: 8px; }
+.cal-row { display: flex; gap: 10px; align-items: center; }
+.cal-time { font-size: 0.75rem; color: var(--text-muted); width: 45px; flex-shrink: 0; }
+.cal-booking { flex: 1; padding: 10px 12px; border-radius: var(--radius-sm); font-size: 0.75rem; font-weight: 500; }
+.cal-booking.booked { background: rgba(139, 92, 246, 0.15); color: var(--primary-light); border-left: 3px solid var(--primary); }
+.cal-booking.free { background: rgba(16, 185, 129, 0.1); color: var(--success); border: 1px dashed rgba(16, 185, 129, 0.3); border-left: 3px solid var(--success); }
+
+.footer { background: var(--bg-dark); border-top: 1px solid var(--border); padding: 80px 0 30px; }
+.footer-grid { display: grid; grid-template-columns: 1.5fr 1fr 1fr 1fr; gap: 40px; margin-bottom: 60px; }
+.footer-brand p { color: var(--text-secondary); font-size: 0.9rem; margin: 16px 0 20px; line-height: 1.7; }
+.footer-socials { display: flex; gap: 12px; }
+.footer-socials a { width: 42px; height: 42px; border-radius: 50%; background: var(--bg-card); border: 1px solid var(--border); display: flex; align-items: center; justify-content: center; color: var(--text-secondary); font-size: 1rem; }
+.footer-socials a:hover { border-color: var(--primary); color: var(--primary); background: rgba(139, 92, 246, 0.1); }
+.footer-links h4 { font-size: 1rem; font-weight: 600; margin-bottom: 20px; }
+.footer-links a { display: block; color: var(--text-secondary); font-size: 0.9rem; padding: 6px 0; }
+.footer-links a:hover { color: var(--primary-light); padding-left: 6px; }
+.footer-bottom { padding-top: 30px; border-top: 1px solid var(--border); text-align: center; }
+.footer-bottom p { color: var(--text-muted); font-size: 0.85rem; }
+
+.modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.7); backdrop-filter: blur(8px); z-index: 5000; display: flex; align-items: center; justify-content: center; opacity: 0; visibility: hidden; transition: var(--transition); padding: 20px; }
+.modal-overlay.active { opacity: 1; visibility: visible; }
+.modal { background: var(--bg-surface); border: 1px solid var(--border); border-radius: var(--radius-xl); width: 100%; max-width: 560px; max-height: 90vh; overflow-y: auto; transform: translateY(20px) scale(0.95); transition: var(--transition); }
+.modal-overlay.active .modal { transform: translateY(0) scale(1); }
+.modal-sm { max-width: 440px; }
+.modal-lg { max-width: 800px; }
+.modal-header { display: flex; align-items: center; justify-content: space-between; padding: 24px 28px; border-bottom: 1px solid var(--border); }
+.modal-header h3 { font-family: var(--font-display); font-size: 1.5rem; font-weight: 600; }
+.modal-close { width: 36px; height: 36px; border-radius: 50%; background: var(--bg-card); color: var(--text-secondary); display: flex; align-items: center; justify-content: center; border: 1px solid var(--border); }
+.modal-close:hover { border-color: var(--danger); color: var(--danger); }
+.modal-close-outside { position: absolute; top: 16px; right: 16px; z-index: 10; }
+.modal-body { padding: 28px; }
+.modal-footer { display: flex; justify-content: space-between; padding: 20px 28px; border-top: 1px solid var(--border); }
+
+.booking-step { display: none; }
+.booking-step.active { display: block; animation: fadeInUp 0.3s ease; }
+.booking-step h4 { font-size: 1.1rem; margin-bottom: 20px; color: var(--primary-light); }
+.booking-master-info { display: flex; align-items: center; gap: 14px; padding: 16px; background: var(--bg-card); border-radius: var(--radius-md); margin-bottom: 20px; }
+.booking-service-item { padding: 14px 16px; background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-md); margin-bottom: 10px; cursor: pointer; display: flex; justify-content: space-between; align-items: center; transition: var(--transition); }
+.booking-service-item:hover, .booking-service-item.selected { border-color: var(--primary); background: rgba(139, 92, 246, 0.05); }
+.booking-service-item.selected::after { content: '✓'; color: var(--primary); font-weight: bold; }
+.booking-calendar { display: flex; gap: 8px; overflow-x: auto; padding-bottom: 12px; margin-bottom: 20px; }
+.calendar-day { min-width: 70px; padding: 14px 12px; text-align: center; background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-md); cursor: pointer; transition: var(--transition); flex-shrink: 0; }
+.calendar-day:hover, .calendar-day.selected { border-color: var(--primary); background: rgba(139, 92, 246, 0.1); }
+.calendar-day .day-name { font-size: 0.7rem; color: var(--text-muted); text-transform: uppercase; margin-bottom: 4px; }
+.calendar-day .day-num { font-size: 1.2rem; font-weight: 700; }
+.calendar-day .day-month { font-size: 0.7rem; color: var(--text-muted); margin-top: 2px; }
+.booking-times { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; }
+.time-slot { padding: 10px; text-align: center; background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-sm); font-size: 0.85rem; cursor: pointer; transition: var(--transition); }
+.time-slot:hover, .time-slot.selected { border-color: var(--primary); background: rgba(139, 92, 246, 0.1); color: var(--primary-light); }
+.time-slot.unavailable { opacity: 0.3; cursor: not-allowed; text-decoration: line-through; }
+.booking-summary { background: var(--bg-card); border-radius: var(--radius-md); padding: 20px; margin-bottom: 20px; }
+.summary-row { display: flex; justify-content: space-between; padding: 8px 0; font-size: 0.9rem; }
+.summary-row:not(:last-child) { border-bottom: 1px solid var(--border); }
+.summary-row .label { color: var(--text-muted); }
+.summary-row .value { font-weight: 600; }
+.booking-success { text-align: center; padding: 30px 0; }
+.success-icon { font-size: 4rem; color: var(--success); margin-bottom: 16px; }
+.booking-success h4 { color: var(--text-primary) !important; font-size: 1.5rem !important; }
+.booking-success p { color: var(--text-secondary); margin-bottom: 20px; }
+
+.form-input { width: 100%; padding: 14px 18px; background: var(--bg-input); border: 1px solid var(--border); border-radius: var(--radius-md); color: var(--text-primary); font-size: 0.9rem; margin-bottom: 12px; transition: var(--transition); }
+.form-input:focus { border-color: var(--primary); box-shadow: 0 0 0 3px var(--primary-glow); }
+.form-input::placeholder { color: var(--text-muted); }
+textarea.form-input { min-height: 80px; resize: vertical; }
+
+.auth-tabs { display: flex; gap: 4px; background: var(--bg-card); border-radius: var(--radius-full); padding: 4px; margin-bottom: 24px; }
+.auth-tab { flex: 1; padding: 10px; text-align: center; border-radius: var(--radius-full); background: transparent; color: var(--text-secondary); font-weight: 500; font-size: 0.9rem; }
+.auth-tab.active { background: var(--gradient-primary); color: white; }
+.form-group { margin-bottom: 16px; }
+.form-group label { display: block; font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 6px; font-weight: 500; }
+.auth-divider { text-align: center; margin: 20px 0; position: relative; }
+.auth-divider::before { content: ''; position: absolute; top: 50%; left: 0; right: 0; height: 1px; background: var(--border); }
+.auth-divider span { background: var(--bg-surface); padding: 0 16px; color: var(--text-muted); font-size: 0.8rem; position: relative; }
+.social-auth { display: flex; gap: 12px; justify-content: center; }
+.social-btn { width: 48px; height: 48px; border-radius: 50%; background: var(--bg-card); border: 1px solid var(--border); color: var(--text-secondary); font-size: 1.1rem; display: flex; align-items: center; justify-content: center; }
+.social-btn:hover { border-color: var(--primary); color: var(--primary); }
+.checkbox-label { display: flex; align-items: center; gap: 8px; cursor: pointer; font-size: 0.9rem; color: var(--text-secondary); }
+.checkbox-label input[type="checkbox"] { width: 18px; height: 18px; accent-color: var(--primary); }
+
+.master-profile { display: grid; grid-template-columns: 1fr 1fr; gap: 30px; }
+.master-profile-avatar { width: 120px; height: 120px; border-radius: 50%; background: var(--gradient-primary); display: flex; align-items: center; justify-content: center; font-size: 2.5rem; color: white; font-weight: 600; margin: 0 auto 16px; }
+.master-profile-gallery { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-top: 20px; }
+.gallery-item { aspect-ratio: 1; border-radius: var(--radius-sm); background: var(--bg-card); border: 1px solid var(--border); display: flex; align-items: center; justify-content: center; font-size: 1.5rem; cursor: pointer; transition: var(--transition); }
+.gallery-item:hover { border-color: var(--primary); transform: scale(1.05); }
+
+.feed-modal-body { display: grid; grid-template-columns: 1.2fr 1fr; gap: 0; padding: 0 !important; }
+.feed-modal-image { min-height: 400px; background: var(--bg-card); display: flex; align-items: center; justify-content: center; font-size: 5rem; }
+.feed-modal-content { padding: 24px; overflow-y: auto; max-height: 600px; }
+.comment-item { display: flex; gap: 10px; padding: 12px 0; border-bottom: 1px solid var(--border); }
+.comment-avatar { width: 32px; height: 32px; border-radius: 50%; background: var(--gradient-primary); display: flex; align-items: center; justify-content: center; color: white; font-size: 0.7rem; font-weight: 600; flex-shrink: 0; }
+.comment-text { font-size: 0.85rem; color: var(--text-secondary); line-height: 1.5; }
+.comment-name { font-weight: 600; color: var(--text-primary); margin-right: 6px; }
+.comment-time { font-size: 0.7rem; color: var(--text-muted); margin-top: 4px; }
+
+.toast-container { position: fixed; bottom: 24px; right: 24px; z-index: 9000; display: flex; flex-direction: column; gap: 10px; }
+.toast { padding: 16px 24px; background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-md); color: var(--text-primary); font-size: 0.9rem; min-width: 280px; box-shadow: var(--shadow-lg); display: flex; align-items: center; gap: 12px; animation: toastIn 0.4s ease; }
+.toast.success { border-left: 3px solid var(--success); }
+.toast.error { border-left: 3px solid var(--danger); }
+.toast.info { border-left: 3px solid var(--primary); }
+.toast i { font-size: 1.1rem; }
+.toast.success i { color: var(--success); }
+.toast.error i { color: var(--danger); }
+.toast.info i { color: var(--primary); }
+.toast.removing { animation: toastOut 0.3s ease forwards; }
+@keyframes toastIn { from { transform: translateX(100%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
+@keyframes toastOut { from { transform: translateX(0); opacity: 1; } to { transform: translateX(100%); opacity: 0; } }
+
+.scroll-top { position: fixed; bottom: 24px; left: 24px; width: 48px; height: 48px; border-radius: 50%; background: var(--gradient-primary); color: white; display: flex; align-items: center; justify-content: center; font-size: 1rem; box-shadow: var(--shadow-md); opacity: 0; visibility: hidden; transform: translateY(20px); transition: var(--transition); z-index: 999; }
+.scroll-top.visible { opacity: 1; visibility: visible; transform: translateY(0); }
+.scroll-top:hover { transform: translateY(-4px); box-shadow: 0 8px 25px var(--primary-glow); }
+
+.animate-on-scroll { opacity: 0; transform: translateY(40px); transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1); }
+.animate-on-scroll.animated { opacity: 1; transform: translateY(0); }
+
+@media (max-width: 1024px) {
+    .categories-grid { grid-template-columns: repeat(3, 1fr); }
+    .masters-grid { grid-template-columns: repeat(2, 1fr); }
+    .feed-masonry { columns: 2; }
+    .nearby-content { grid-template-columns: 1fr; }
+    .map-placeholder { height: 350px; }
+    .cta-card { grid-template-columns: 1fr; padding: 40px; }
+    .cta-visual { order: -1; }
+    .footer-grid { grid-template-columns: repeat(2, 1fr); }
+    .review-card { min-width: calc(50% - 12px); }
+    .master-profile { grid-template-columns: 1fr; }
+    .feed-modal-body { grid-template-columns: 1fr; }
+}
+@media (max-width: 768px) {
+    .nav { display: none; }
+    .btn-burger { display: flex; }
+    .categories-grid { grid-template-columns: repeat(2, 1fr); gap: 12px; }
+    .category-card { padding: 20px 16px; }
+    .masters-grid { grid-template-columns: 1fr; }
+    .feed-masonry { columns: 1; }
+    .steps-grid { grid-template-columns: 1fr; gap: 16px; }
+    .services-list { grid-template-columns: 1fr; }
+    .hero-search-inner { flex-direction: column; padding: 12px; }
+    .search-location { border-left: none; border-top: 1px solid var(--border); }
+    .btn-search-hero { width: 100%; justify-content: center; }
+    .hero-stats { gap: 24px; flex-wrap: wrap; }
+    .stat-number { font-size: 1.8rem; }
+    .review-card { min-width: 100%; }
+    .booking-times { grid-template-columns: repeat(3, 1fr); }
+    .cta-card { padding: 30px 24px; }
+    .footer-grid { grid-template-columns: 1fr; gap: 30px; }
+    section { padding: 70px 0; }
+    .header-actions .btn-primary span { display: none; }
+}
+@media (max-width: 480px) {
+    .categories-grid { grid-template-columns: repeat(2, 1fr); gap: 10px; }
+    .category-card { padding: 16px 12px; }
+    .category-icon { width: 48px; height: 48px; font-size: 1.2rem; }
+    .category-card h3 { font-size: 0.9rem; }
+    .hero-title { font-size: 2.5rem; }
+    .modal { border-radius: var(--radius-lg); }
+    .modal-body { padding: 20px; }
+}
+
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: var(--bg-dark); }
+::-webkit-scrollbar-thumb { background: var(--bg-card); border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: var(--primary); }
+::selection { background: rgba(139, 92, 246, 0.3); color: white; }
+</style>
+</head>
+<body>
+
+<div class="preloader" id="preloader">
+    <div class="preloader-inner">
+        <div class="preloader-logo">NEFER</div>
+        <div class="preloader-bar"><div class="preloader-progress"></div></div>
+    </div>
+</div>
+
+<header class="header" id="header">
+    <div class="container">
+        <div class="header-inner">
+            <a href="#" class="logo">
+                <span class="logo-icon">𓂀</span>
+                <span class="logo-text">NEFER</span>
+            </a>
+            <nav class="nav" id="nav">
+                <a href="#home" class="nav-link active" data-section="home">Главная</a>
+                <a href="#masters" class="nav-link" data-section="masters">Мастера</a>
+                <a href="#feed" class="nav-link" data-section="feed">Лента</a>
+                <a href="#services" class="nav-link" data-section="services">Услуги</a>
+                <a href="#nearby" class="nav-link" data-section="nearby">Рядом</a>
+                <a href="#reviews" class="nav-link" data-section="reviews">Отзывы</a>
+            </nav>
+            <div class="header-actions">
+                <button class="btn-search" id="searchToggle"><i class="fas fa-search"></i></button>
+                <button class="btn-primary btn-sm" id="loginBtn"><i class="fas fa-user"></i><span>Войти</span></button>
+                <button class="btn-burger" id="burgerBtn"><span></span><span></span><span></span></button>
+            </div>
+        </div>
+    </div>
+    <div class="search-bar" id="searchBar">
+        <div class="container">
+            <div class="search-inner">
+                <i class="fas fa-search"></i>
+                <input type="text" placeholder="Найти мастера, услугу или салон..." id="searchInput">
+                <button class="search-close" id="searchClose"><i class="fas fa-times"></i></button>
+            </div>
+            <div class="search-tags">
+                <span class="search-tag">Маникюр</span>
+                <span class="search-tag">Окрашивание</span>
+                <span class="search-tag">Брови</span>
+                <span class="search-tag">Массаж</span>
+                <span class="search-tag">Стрижка</span>
+                <span class="search-tag">Макияж</span>
+            </div>
+        </div>
+    </div>
+</header>
+
+<div class="mobile-menu" id="mobileMenu">
+    <div class="mobile-menu-header">
+        <span class="logo-text">NEFER</span>
+        <button class="mobile-close" id="mobileClose"><i class="fas fa-times"></i></button>
+    </div>
+    <nav class="mobile-nav">
+        <a href="#home" class="mobile-nav-link"><i class="fas fa-home"></i> Главная</a>
+        <a href="#masters" class="mobile-nav-link"><i class="fas fa-user-tie"></i> Мастера</a>
+        <a href="#feed" class="mobile-nav-link"><i class="fas fa-images"></i> Лента</a>
+        <a href="#services" class="mobile-nav-link"><i class="fas fa-concierge-bell"></i> Услуги</a>
+        <a href="#nearby" class="mobile-nav-link"><i class="fas fa-map-marker-alt"></i> Рядом</a>
+        <a href="#reviews" class="mobile-nav-link"><i class="fas fa-star"></i> Отзывы</a>
+    </nav>
+    <div class="mobile-menu-footer">
+        <button class="btn-primary btn-block" id="mobileLoginBtn"><i class="fas fa-user"></i> Войти</button>
+        <button class="btn-outline btn-block mt-10" id="becomeMasterMobile"><i class="fas fa-magic"></i> Стать мастером</button>
+    </div>
+</div>
+<div class="mobile-overlay" id="mobileOverlay"></div>
+
+<section class="hero" id="home">
+    <div class="hero-bg">
+        <div class="hero-particles" id="heroParticles"></div>
+        <div class="hero-gradient"></div>
+    </div>
+    <div class="container">
+        <div class="hero-content">
+            <div class="hero-badge"><span class="badge-icon">✨</span><span>Маркетплейс красоты №1</span></div>
+            <h1 class="hero-title">
+                <span class="title-line">Красота</span>
+                <span class="title-line title-accent">начинается</span>
+                <span class="title-line">с <span class="text-gradient">NEFER</span></span>
+            </h1>
+            <p class="hero-subtitle">Найдите лучших мастеров красоты рядом с вами. Запишитесь онлайн за пару кликов.</p>
+            <div class="hero-search">
+                <div class="hero-search-inner">
+                    <div class="search-field"><i class="fas fa-search"></i><input type="text" placeholder="Какую услугу ищете?" id="heroSearchInput"></div>
+                    <div class="search-field search-location"><i class="fas fa-map-marker-alt"></i><input type="text" placeholder="Город" value="Москва" id="heroLocationInput"></div>
+                    <button class="btn-primary btn-search-hero" id="heroSearchBtn"><i class="fas fa-search"></i><span>Найти</span></button>
+                </div>
+            </div>
+            <div class="hero-stats">
+                <div class="stat-item"><span class="stat-number" data-count="2500">0</span><span class="stat-label">Мастеров</span></div>
+                <div class="stat-item"><span class="stat-number" data-count="15000">0</span><span class="stat-label">Записей</span></div>
+                <div class="stat-item"><span class="stat-number" data-count="4800">0</span><span class="stat-label">Отзывов</span></div>
+                <div class="stat-item"><span class="stat-number" data-count="98">0</span><span class="stat-label">% довольны</span></div>
+            </div>
+        </div>
+    </div>
+    <div class="hero-scroll"><a href="#categories" class="scroll-indicator"><span>Смотреть</span><i class="fas fa-chevron-down"></i></a></div>
+</section>
+
+<section class="categories" id="categories">
+    <div class="container">
+        <div class="section-header">
+            <span class="section-badge">Категории</span>
+            <h2 class="section-title">Найдите свою <span class="text-gradient">услугу</span></h2>
+            <p class="section-subtitle">Выберите категорию и найдите лучшего мастера</p>
+        </div>
+        <div class="categories-grid">
+            <div class="category-card" data-category="hair"><div class="category-icon"><i class="fas fa-cut"></i></div><h3>Волосы</h3><p>Стрижки, окрашивание</p><span class="category-count">450+ мастеров</span></div>
+            <div class="category-card" data-category="nails"><div class="category-icon"><i class="fas fa-hand-sparkles"></i></div><h3>Ногти</h3><p>Маникюр, педикюр</p><span class="category-count">380+ мастеров</span></div>
+            <div class="category-card" data-category="brows"><div class="category-icon"><i class="fas fa-eye"></i></div><h3>Брови и ресницы</h3><p>Оформление, ламинирование</p><span class="category-count">290+ мастеров</span></div>
+            <div class="category-card" data-category="makeup"><div class="category-icon"><i class="fas fa-palette"></i></div><h3>Макияж</h3><p>Дневной, вечерний</p><span class="category-count">200+ мастеров</span></div>
+            <div class="category-card" data-category="massage"><div class="category-icon"><i class="fas fa-spa"></i></div><h3>Массаж и SPA</h3><p>Релакс, лечебный</p><span class="category-count">180+ мастеров</span></div>
+            <div class="category-card" data-category="cosmetology"><div class="category-icon"><i class="fas fa-magic"></i></div><h3>Косметология</h3><p>Уходы, пилинги</p><span class="category-count">150+ мастеров</span></div>
+            <div class="category-card" data-category="tattoo"><div class="category-icon"><i class="fas fa-pen-fancy"></i></div><h3>Тату и перманент</h3><p>Татуировки, ПМ</p><span class="category-count">120+ мастеров</span></div>
+            <div class="category-card" data-category="barber"><div class="category-icon"><i class="fas fa-user-tie"></i></div><h3>Барбершоп</h3><p>Мужские стрижки</p><span class="category-count">170+ мастеров</span></div>
+        </div>
+    </div>
+</section>
+
+<section class="masters-section" id="masters">
+    <div class="container">
+        <div class="section-header">
+            <span class="section-badge">Топ мастера</span>
+            <h2 class="section-title">Лучшие <span class="text-gradient">мастера</span></h2>
+            <p class="section-subtitle">Проверенные профессионалы с высокими оценками</p>
+        </div>
+        <div class="masters-filters">
+            <button class="filter-btn active" data-filter="all">Все</button>
+            <button class="filter-btn" data-filter="hair">Волосы</button>
+            <button class="filter-btn" data-filter="nails">Ногти</button>
+            <button class="filter-btn" data-filter="brows">Брови</button>
+            <button class="filter-btn" data-filter="makeup">Макияж</button>
+            <button class="filter-btn" data-filter="massage">Массаж</button>
+            <button class="filter-btn" data-filter="cosmetology">Косметология</button>
+        </div>
+        <div class="masters-grid" id="mastersGrid"></div>
+        <div class="section-footer"><button class="btn-outline btn-lg" id="loadMoreMasters">Показать ещё <i class="fas fa-arrow-down"></i></button></div>
+    </div>
+</section>
+
+<section class="feed-section" id="feed">
+    <div class="container">
+        <div class="section-header">
+            <span class="section-badge">Вдохновение</span>
+            <h2 class="section-title">Лента <span class="text-gradient">работ</span></h2>
+            <p class="section-subtitle">Работы наших мастеров</p>
+        </div>
+        <div class="feed-filters">
+            <button class="filter-btn active" data-feed-filter="all">🔥 Все</button>
+            <button class="filter-btn" data-feed-filter="popular">❤️ Популярное</button>
+            <button class="filter-btn" data-feed-filter="new">🆕 Новое</button>
+            <button class="filter-btn" data-feed-filter="hair">💇 Волосы</button>
+            <button class="filter-btn" data-feed-filter="nails">💅 Ногти</button>
+            <button class="filter-btn" data-feed-filter="makeup">💄 Макияж</button>
+        </div>
+        <div class="feed-masonry" id="feedGrid"></div>
+        <div class="section-footer"><button class="btn-outline btn-lg" id="loadMoreFeed">Показать ещё <i class="fas fa-arrow-down"></i></button></div>
+    </div>
+</section>
+
+<section class="services-section" id="services">
+    <div class="container">
+        <div class="section-header">
+            <span class="section-badge">Запись онлайн</span>
+            <h2 class="section-title">Как это <span class="text-gradient">работает</span></h2>
+            <p class="section-subtitle">Простая запись за 3 шага</p>
+        </div>
+        <div class="steps-grid">
+            <div class="step-card"><div class="step-number">01</div><div class="step-icon"><i class="fas fa-search"></i></div><h3>Найдите мастера</h3><p>Выберите услугу, посмотрите портфолио и отзывы</p></div>
+            <div class="step-card"><div class="step-number">02</div><div class="step-icon"><i class="fas fa-calendar-check"></i></div><h3>Выберите время</h3><p>Посмотрите расписание и выберите удобный слот</p></div>
+            <div class="step-card"><div class="step-number">03</div><div class="step-icon"><i class="fas fa-heart"></i></div><h3>Наслаждайтесь</h3><p>Придите на процедуру и оставьте отзыв!</p></div>
+        </div>
+        <div class="popular-services">
+            <h3 class="subsection-title">Популярные услуги</h3>
+            <div class="services-list" id="servicesList"></div>
+        </div>
+    </div>
+</section>
+
+<section class="nearby-section" id="nearby">
+    <div class="container">
+        <div class="section-header">
+            <span class="section-badge">Геолокация</span>
+            <h2 class="section-title">Мастера <span class="text-gradient">рядом</span></h2>
+            <p class="section-subtitle">Найдите ближайших мастеров</p>
+        </div>
+        <div class="nearby-content">
+            <div class="map-container" id="mapContainer">
+                <div class="map-placeholder">
+                    <div class="map-mock">
+                        <div class="map-pin" style="top:30%;left:40%" data-master="Анна К."><div class="pin-avatar">А</div><div class="pin-pulse"></div></div>
+                        <div class="map-pin" style="top:50%;left:60%" data-master="Мария С."><div class="pin-avatar">М</div><div class="pin-pulse"></div></div>
+                        <div class="map-pin" style="top:40%;left:30%" data-master="Елена В."><div class="pin-avatar">Е</div><div class="pin-pulse"></div></div>
+                        <div class="map-pin" style="top:60%;left:45%" data-master="Ольга Д."><div class="pin-avatar">О</div><div class="pin-pulse"></div></div>
+                        <div class="map-pin" style="top:25%;left:55%" data-master="Ирина Н."><div class="pin-avatar">И</div><div class="pin-pulse"></div></div>
+                        <div class="map-pin" style="top:70%;left:35%" data-master="Дарья Л."><div class="pin-avatar">Д</div><div class="pin-pulse"></div></div>
+                        <div class="map-center-user"><i class="fas fa-street-view"></i><span>Вы здесь</span><div class="user-radius"></div></div>
+                    </div>
+                    <button class="btn-primary btn-locate" id="locateBtn"><i class="fas fa-crosshairs"></i> Определить местоположение</button>
+                </div>
+            </div>
+            <div class="nearby-list" id="nearbyList"></div>
+        </div>
+    </div>
+</section>
+
+<section class="reviews-section" id="reviews">
+    <div class="container">
+        <div class="section-header">
+            <span class="section-badge">Отзывы</span>
+            <h2 class="section-title">Что говорят <span class="text-gradient">клиенты</span></h2>
+            <p class="section-subtitle">Реальные отзывы</p>
+        </div>
+        <div class="reviews-slider" id="reviewsSlider"><div class="reviews-track" id="reviewsTrack"></div></div>
+        <div class="reviews-controls">
+            <button class="review-arrow review-prev" id="reviewPrev"><i class="fas fa-arrow-left"></i></button>
+            <div class="reviews-dots" id="reviewsDots"></div>
+            <button class="review-arrow review-next" id="reviewNext"><i class="fas fa-arrow-right"></i></button>
+        </div>
+    </div>
+</section>
+
+<section class="cta-section">
+    <div class="container">
+        <div class="cta-card">
+            <div class="cta-content">
+                <span class="cta-badge">Для мастеров</span>
+                <h2>Станьте мастером на NEFER</h2>
+                <p>Привлекайте клиентов, показывайте работы и управляйте записями</p>
+                <div class="cta-features">
+                    <div class="cta-feature"><i class="fas fa-check-circle"></i> Бесплатная регистрация</div>
+                    <div class="cta-feature"><i class="fas fa-check-circle"></i> Личный кабинет</div>
+                    <div class="cta-feature"><i class="fas fa-check-circle"></i> Онлайн-запись</div>
+                    <div class="cta-feature"><i class="fas fa-check-circle"></i> Портфолио работ</div>
+                </div>
+                <button class="btn-primary btn-lg" id="becomeMasterBtn"><i class="fas fa-magic"></i> Стать мастером</button>
+            </div>
+            <div class="cta-visual">
+                <div class="cta-phone">
+                    <div class="phone-screen">
+                        <div class="phone-header-mock"><span class="phone-logo">NEFER</span><span class="phone-status">Мастер</span></div>
+                        <div class="phone-stats-mock">
+                            <div class="phone-stat"><strong>24</strong><span>Записи</span></div>
+                            <div class="phone-stat"><strong>4.9</strong><span>Рейтинг</span></div>
+                            <div class="phone-stat"><strong>89</strong><span>Отзывы</span></div>
+                        </div>
+                        <div class="phone-calendar-mock">
+                            <div class="cal-row"><span class="cal-time">10:00</span><span class="cal-booking booked">Маникюр — Анна</span></div>
+                            <div class="cal-row"><span class="cal-time">12:00</span><span class="cal-booking booked">Педикюр — Мария</span></div>
+                            <div class="cal-row"><span class="cal-time">14:00</span><span class="cal-booking free">Свободно</span></div>
+                            <div class="cal-row"><span class="cal-time">16:00</span><span class="cal-booking booked">Гель-лак — Елена</span></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<footer class="footer">
+    <div class="container">
+        <div class="footer-grid">
+            <div class="footer-brand">
+                <a href="#" class="logo"><span class="logo-icon">𓂀</span><span class="logo-text">NEFER</span></a>
+                <p>Маркетплейс красоты — найдите лучших мастеров и запишитесь онлайн</p>
+                <div class="footer-socials">
+                    <a href="#"><i class="fab fa-telegram"></i></a>
+                    <a href="#"><i class="fab fa-instagram"></i></a>
+                    <a href="#"><i class="fab fa-vk"></i></a>
+                    <a href="#"><i class="fab fa-youtube"></i></a>
+                </div>
+            </div>
+            <div class="footer-links"><h4>Клиентам</h4><a href="#">Найти мастера</a><a href="#">Популярные услуги</a><a href="#">Как записаться</a><a href="#">Отзывы</a></div>
+            <div class="footer-links"><h4>Мастерам</h4><a href="#">Регистрация</a><a href="#">Личный кабинет</a><a href="#">Тарифы</a><a href="#">Обучение</a></div>
+            <div class="footer-links"><h4>Компания</h4><a href="#">О нас</a><a href="#">Блог</a><a href="#">Контакты</a><a href="#">Политика конфиденциальности</a></div>
+        </div>
+        <div class="footer-bottom"><p>&copy; 2024 NEFER. Все права защищены. 💜</p></div>
+    </div>
+</footer>
+
+<!-- Modals -->
+<div class="modal-overlay" id="bookingModal">
+    <div class="modal">
+        <div class="modal-header"><h3>Запись к мастеру</h3><button class="modal-close" id="bookingClose"><i class="fas fa-times"></i></button></div>
+        <div class="modal-body">
+            <div class="booking-steps" id="bookingSteps">
+                <div class="booking-step active" data-step="1"><h4>1. Выберите услугу</h4><div class="booking-master-info" id="bookingMasterInfo"></div><div class="booking-services" id="bookingServices"></div></div>
+                <div class="booking-step" data-step="2"><h4>2. Выберите дату и время</h4><div class="booking-calendar" id="bookingCalendar"></div><div class="booking-times" id="bookingTimes"></div></div>
+                <div class="booking-step" data-step="3"><h4>3. Подтверждение</h4><div class="booking-summary" id="bookingSummary"></div><div class="booking-form"><input type="text" placeholder="Ваше имя" id="bookingName" class="form-input"><input type="tel" placeholder="Телефон" id="bookingPhone" class="form-input"><textarea placeholder="Комментарий" id="bookingComment" class="form-input"></textarea></div></div>
+                <div class="booking-step" data-step="4"><div class="booking-success"><div class="success-icon"><i class="fas fa-check-circle"></i></div><h4>Вы записаны! 🎉</h4><p>Подтверждение отправлено</p><div class="booking-details" id="bookingDetails"></div></div></div>
+            </div>
+        </div>
+        <div class="modal-footer" id="bookingFooter"><button class="btn-outline" id="bookingBack">Назад</button><button class="btn-primary" id="bookingNext">Далее</button></div>
+    </div>
+</div>
+
+<div class="modal-overlay" id="authModal">
+    <div class="modal modal-sm">
+        <div class="modal-header"><h3 id="authTitle">Вход</h3><button class="modal-close" id="authClose"><i class="fas fa-times"></i></button></div>
+        <div class="modal-body">
+            <div class="auth-tabs"><button class="auth-tab active" data-auth="login">Вход</button><button class="auth-tab" data-auth="register">Регистрация</button></div>
+            <form class="auth-form" id="loginForm">
+                <div class="form-group"><label>Телефон или Email</label><input type="text" placeholder="+7 (999) 999-99-99" class="form-input"></div>
+                <div class="form-group"><label>Пароль</label><input type="password" placeholder="Введите пароль" class="form-input"></div>
+                <button type="submit" class="btn-primary btn-block">Войти</button>
+                <div class="auth-divider"><span>или</span></div>
+                <div class="social-auth"><button type="button" class="social-btn"><i class="fab fa-google"></i></button><button type="button" class="social-btn"><i class="fab fa-vk"></i></button><button type="button" class="social-btn"><i class="fab fa-telegram"></i></button></div>
+            </form>
+            <form class="auth-form hidden" id="registerForm">
+                <div class="form-group"><label>Имя</label><input type="text" placeholder="Ваше имя" class="form-input"></div>
+                <div class="form-group"><label>Телефон</label><input type="tel" placeholder="+7 (999) 999-99-99" class="form-input"></div>
+                <div class="form-group"><label>Email</label><input type="email" placeholder="email@example.com" class="form-input"></div>
+                <div class="form-group"><label>Пароль</label><input type="password" placeholder="Придумайте пароль" class="form-input"></div>
+                <div class="form-group"><label class="checkbox-label"><input type="checkbox"><span>Я мастер красоты</span></label></div>
+                <button type="submit" class="btn-primary btn-block">Зарегистрироваться</button>
+            </form>
+        </div>
+    </div>
+</div>
+
+<div class="modal-overlay" id="masterModal">
+    <div class="modal modal-lg">
+        <div class="modal-header"><h3>Профиль мастера</h3><button class="modal-close" id="masterClose"><i class="fas fa-times"></i></button></div>
+        <div class="modal-body" id="masterModalBody"></div>
+    </div>
+</div>
+
+<div class="modal-overlay" id="feedModal">
+    <div class="modal modal-lg">
+        <button class="modal-close modal-close-outside" id="feedClose"><i class="fas fa-times"></i></button>
+        <div class="modal-body feed-modal-body" id="feedModalBody"></div>
+    </div>
+</div>
+
+<div class="toast-container" id="toastContainer"></div>
+<button class="scroll-top" id="scrollTop"><i class="fas fa-arrow-up"></i></button>
+
+<script>
+// Вставьте сюда ВЕСЬ JavaScript код из app.js (из предыдущего сообщения)
+// Копирую его ниже:
+
+(function(){
+'use strict';
+
+const mastersData=[{id:1,name:'Анна Красова',specialty:'Мастер маникюра',category:'nails',rating:4.9,reviews:127,verified:true,top:true,location:'м. Тверская, 1.2 км',avatar:'А',tags:['Маникюр','Педикюр','Гель-лак','Наращивание'],emoji:'💅',distance:'1.2 км',services:[{name:'Маникюр классический',price:'1 500 ₽',duration:'1 час'},{name:'Маникюр + гель-лак',price:'2 500 ₽',duration:'1.5 часа'},{name:'Наращивание ногтей',price:'4 000 ₽',duration:'2.5 часа'},{name:'Педикюр',price:'2 000 ₽',duration:'1 час'}],gallery:['💅','✨','💎','🌸','🎨','💜']},{id:2,name:'Мария Светлова',specialty:'Стилист-колорист',category:'hair',rating:4.8,reviews:95,verified:true,top:true,location:'м. Арбатская, 2.1 км',avatar:'М',tags:['Окрашивание','Стрижка','Укладка','Балаяж'],emoji:'💇‍♀️',distance:'2.1 км',services:[{name:'Стрижка женская',price:'3 000 ₽',duration:'1 час'},{name:'Окрашивание',price:'5 000 ₽',duration:'2.5 часа'},{name:'Балаяж',price:'8 000 ₽',duration:'3 часа'},{name:'Укладка',price:'2 000 ₽',duration:'40 мин'}],gallery:['💇‍♀️','🎨','✂️','🌟','💫','🌺']},{id:3,name:'Елена Волкова',specialty:'Бровист / Лэшмейкер',category:'brows',rating:5.0,reviews:203,verified:true,top:true,location:'м. Чистые пруды, 0.8 км',avatar:'Е',tags:['Брови','Ресницы','Ламинирование','Наращивание'],emoji:'👁️',distance:'0.8 км',services:[{name:'Оформление бровей',price:'1 200 ₽',duration:'40 мин'},{name:'Ламинирование бровей',price:'2 500 ₽',duration:'1 час'},{name:'Наращивание ресниц',price:'3 500 ₽',duration:'2 часа'},{name:'Ламинирование ресниц',price:'2 000 ₽',duration:'1 час'}],gallery:['👁️','✨','🌙','⭐','💫','🌟']},{id:4,name:'Ольга Дмитриева',specialty:'Визажист',category:'makeup',rating:4.7,reviews:88,verified:true,top:false,location:'м. Кузнецкий мост, 1.5 км',avatar:'О',tags:['Макияж','Свадебный','Вечерний','Дневной'],emoji:'💄',distance:'1.5 км',services:[{name:'Дневной макияж',price:'3 000 ₽',duration:'1 час'},{name:'Вечерний макияж',price:'4 500 ₽',duration:'1.5 часа'},{name:'Свадебный макияж',price:'7 000 ₽',duration:'2 часа'},{name:'Пробный макияж',price:'3 500 ₽',duration:'1.5 часа'}],gallery:['💄','💋','🌹','✨','👑','🎀']},{id:5,name:'Ирина Новикова',specialty:'Массажист',category:'massage',rating:4.9,reviews:156,verified:true,top:true,location:'м. Парк культуры, 3.0 км',avatar:'И',tags:['Массаж','SPA','Антицеллюлитный','Лимфодренаж'],emoji:'💆‍♀️',distance:'3.0 км',services:[{name:'Расслабляющий массаж',price:'3 500 ₽',duration:'1 час'},{name:'Антицеллюлитный массаж',price:'4 000 ₽',duration:'1 час'},{name:'Лимфодренаж',price:'3 000 ₽',duration:'45 мин'},{name:'SPA-комплекс',price:'6 000 ₽',duration:'2 часа'}],gallery:['💆‍♀️','🧘‍♀️','🌿','🕯️','🌸','💐']},{id:6,name:'Дарья Лебедева',specialty:'Косметолог',category:'cosmetology',rating:4.8,reviews:72,verified:true,top:false,location:'м. Маяковская, 1.8 км',avatar:'Д',tags:['Чистка лица','Пилинг','Уходы','Мезотерапия'],emoji:'🧴',distance:'1.8 км',services:[{name:'Чистка лица',price:'4 000 ₽',duration:'1.5 часа'},{name:'Химический пилинг',price:'3 500 ₽',duration:'45 мин'},{name:'Уходовая процедура',price:'5 000 ₽',duration:'1 час'},{name:'Мезотерапия',price:'6 000 ₽',duration:'30 мин'}],gallery:['🧴','✨','💎','🌟','💧','🪞']},{id:7,name:'Софья Петрова',specialty:'Мастер маникюра',category:'nails',rating:4.6,reviews:64,verified:false,top:false,location:'м. Новослободская, 2.5 км',avatar:'С',tags:['Маникюр','Дизайн ногтей','Гель-лак'],emoji:'💅',distance:'2.5 км',services:[{name:'Маникюр',price:'1 200 ₽',duration:'1 час'},{name:'Маникюр + дизайн',price:'2 800 ₽',duration:'1.5 часа'},{name:'Снятие + маникюр',price:'1 800 ₽',duration:'1.5 часа'}],gallery:['💅','🎨','💎','✨','🌸','🦋']},{id:8,name:'Виктория Ким',specialty:'Стилист',category:'hair',rating:4.9,reviews:189,verified:true,top:true,location:'м. Патриаршие, 1.0 км',avatar:'В',tags:['Стрижка','Окрашивание','Кератин','Ботокс'],emoji:'✂️',distance:'1.0 км',services:[{name:'Стрижка',price:'4 000 ₽',duration:'1 час'},{name:'Сложное окрашивание',price:'10 000 ₽',duration:'4 часа'},{name:'Кератиновое выпрямление',price:'7 000 ₽',duration:'2.5 часа'},{name:'Ботокс для волос',price:'5 000 ₽',duration:'2 часа'}],gallery:['✂️','💇‍♀️','🌟','💫','🎨','👑']},{id:9,name:'Алиса Морозова',specialty:'Бровист',category:'brows',rating:4.7,reviews:91,verified:true,top:false,location:'м. Лубянка, 1.3 км',avatar:'А',tags:['Брови','Коррекция','Окрашивание'],emoji:'👁️',distance:'1.3 км',services:[{name:'Коррекция бровей',price:'800 ₽',duration:'30 мин'},{name:'Коррекция + окрашивание',price:'1 800 ₽',duration:'50 мин'},{name:'Архитектура бровей',price:'2 200 ₽',duration:'1 час'}],gallery:['👁️','✨','🌙','💫','⭐','🖌️']}];
+
+const feedData=[{id:1,masterId:1,masterName:'Анна К.',masterAvatar:'А',emoji:'💅',description:'Нежный нюдовый маникюр с минималистичным дизайном ✨',likes:234,comments:18,time:'2 часа назад',tags:['маникюр','нюд','дизайн'],category:'nails',height:280},{id:2,masterId:2,masterName:'Мария С.',masterAvatar:'М',emoji:'💇‍♀️',description:'Шоколадный балаяж — идеальный осенний образ 🍂',likes:456,comments:32,time:'3 часа назад',tags:['балаяж','окрашивание'],category:'hair',height:350},{id:3,masterId:3,masterName:'Елена В.',masterAvatar:'Е',emoji:'👁️',description:'Ламинирование бровей — эффект wow! 🔥',likes:189,comments:12,time:'5 часов назад',tags:['брови','ламинирование'],category:'brows',height:240},{id:4,masterId:4,masterName:'Ольга Д.',masterAvatar:'О',emoji:'💄',description:'Свадебный макияж для прекрасной невесты 👰‍♀️',likes:567,comments:45,time:'6 часов назад',tags:['макияж','свадебный'],category:'makeup',height:320},{id:5,masterId:1,masterName:'Анна К.',masterAvatar:'А',emoji:'💎',description:'Геометрический дизайн в трендовых цветах сезона',likes:345,comments:27,time:'8 часов назад',tags:['маникюр','дизайн'],category:'nails',height:300},{id:6,masterId:8,masterName:'Виктория К.',masterAvatar:'В',emoji:'✂️',description:'Стильная короткая стрижка — дерзко и элегантно 💫',likes:278,comments:19,time:'10 часов назад',tags:['стрижка'],category:'hair',height:260},{id:7,masterId:5,masterName:'Ирина Н.',masterAvatar:'И',emoji:'💆‍♀️',description:'Релакс-массаж с ароматерапией 🕯️',likes:123,comments:8,time:'12 часов назад',tags:['массаж','spa'],category:'massage',height:220},{id:8,masterId:6,masterName:'Дарья Л.',masterAvatar:'Д',emoji:'🧴',description:'Результат пилинга — кожа сияет! До/После',likes:412,comments:34,time:'1 день назад',tags:['косметология','пилинг'],category:'cosmetology',height:340},{id:9,masterId:2,masterName:'Мария С.',masterAvatar:'М',emoji:'🌟',description:'Платиновый блонд — ледяная королева ❄️',likes:534,comments:41,time:'1 день назад',tags:['блонд','окрашивание'],category:'hair',height:300}];
+
+const reviewsData=[{name:'Александра М.',avatar:'А',rating:5,text:'Потрясающий сервис! Нашла мастера за 5 минут. Маникюр идеальный!',service:'Маникюр у Анны К.'},{name:'Екатерина С.',avatar:'Е',rating:5,text:'NEFER — находка! Удобно выбирать по портфолио. Окрашивание как хотела.',service:'Окрашивание у Марии С.'},{name:'Ольга В.',avatar:'О',rating:5,text:'Записалась через NEFER — быстро, удобно. Мастер Елена — профи!',service:'Брови у Елены В.'},{name:'Наталья К.',avatar:'Н',rating:4,text:'Удобная платформа. Люблю смотреть ленту работ для вдохновения.',service:'Макияж у Ольги Д.'},{name:'Марина Л.',avatar:'М',rating:5,text:'Лучший массаж! Через NEFER нашла Ирину — золотые руки!',service:'Массаж у Ирины Н.'},{name:'Дарья П.',avatar:'Д',rating:5,text:'Как мастер — в восторге! Клиенты находят сами, записываются онлайн.',service:'Мастер маникюра'}];
+
+const popularServices=[{name:'Маникюр + гель-лак',icon:'💅',price:'от 1 500 ₽',duration:'1-1.5 часа'},{name:'Женская стрижка',icon:'✂️',price:'от 2 000 ₽',duration:'1 час'},{name:'Окрашивание волос',icon:'🎨',price:'от 4 000 ₽',duration:'2-3 часа'},{name:'Оформление бровей',icon:'👁️',price:'от 800 ₽',duration:'30-40 мин'},{name:'Наращивание ресниц',icon:'✨',price:'от 2 500 ₽',duration:'1.5-2 часа'},{name:'Макияж вечерний',icon:'💄',price:'от 3 000 ₽',duration:'1-1.5 часа'},{name:'Массаж расслабляющий',icon:'💆‍♀️',price:'от 2 500 ₽',duration:'1 час'},{name:'Чистка лица',icon:'🧴',price:'от 3 000 ₽',duration:'1-1.5 часа'}];
+
+const state={currentFilter:'all',currentFeedFilter:'all',bookingStep:1,selectedMaster:null,selectedService:null,selectedDate:null,selectedTime:null,reviewSlide:0,likedFeeds:new Set()};
+
+const $=s=>document.querySelector(s);
+const $$=s=>document.querySelectorAll(s);
+
+document.addEventListener('DOMContentLoaded',()=>{initPreloader();initParticles();initHeader();initMobileMenu();initSearch();initCategories();renderMasters();renderFeed();renderServices();renderNearby();renderReviews();initBookingModal();initAuthModal();initMasterModal();initFeedModal();initScrollAnimations();initCounters();initScrollTop();initFilterButtons()});
+
+function initPreloader(){setTimeout(()=>{const p=$('#preloader');p.classList.add('hidden');setTimeout(()=>p.remove(),500)},1800)}
+
+function initParticles(){const c=$('#heroParticles');if(!c)return;for(let i=0;i<30;i++){const p=document.createElement('div');p.classList.add('particle');p.style.left=Math.random()*100+'%';p.style.animationDuration=(Math.random()*10+8)+'s';p.style.animationDelay=(Math.random()*10)+'s';p.style.width=(Math.random()*4+2)+'px';p.style.height=p.style.width;p.style.background=Math.random()>0.5?'var(--primary)':'var(--secondary)';p.style.opacity=Math.random()*0.5+0.1;c.appendChild(p)}}
+
+function initHeader(){const h=$('#header');window.addEventListener('scroll',()=>{const s=window.scrollY;s>50?h.classList.add('scrolled'):h.classList.remove('scrolled');$$('section[id]').forEach(sec=>{const t=sec.offsetTop-100,b=t+sec.offsetHeight,id=sec.getAttribute('id'),l=$(`.nav-link[data-section="${id}"]`);if(l){if(s>=t&&s<b){$$('.nav-link').forEach(n=>n.classList.remove('active'));l.classList.add('active')}}})})}
+
+function initMobileMenu(){const b=$('#burgerBtn'),m=$('#mobileMenu'),o=$('#mobileOverlay'),c=$('#mobileClose');function open(){m.classList.add('active');o.classList.add('active');document.body.style.overflow='hidden'}function close(){m.classList.remove('active');o.classList.remove('active');document.body.style.overflow=''}b.addEventListener('click',open);c.addEventListener('click',close);o.addEventListener('click',close);$$('.mobile-nav-link').forEach(l=>l.addEventListener('click',close))}
+
+function initSearch(){const t=$('#searchToggle'),b=$('#searchBar'),c=$('#searchClose'),i=$('#searchInput');t.addEventListener('click',()=>{b.classList.toggle('active');if(b.classList.contains('active'))setTimeout(()=>i.focus(),300)});c.addEventListener('click',()=>{b.classList.remove('active');i.value=''});$$('.search-tag').forEach(tag=>tag.addEventListener('click',()=>{i.value=tag.textContent;showToast(`Поиск: "${tag.textContent}"`,'info')}));$('#heroSearchBtn').addEventListener('click',()=>{const q=$('#heroSearchInput').value;if(q){showToast(`Ищем: "${q}"`,'info');$('#masters').scrollIntoView({behavior:'smooth'})}})}
+
+function initCategories(){$$('.category-card').forEach(card=>card.addEventListener('click',()=>{const cat=card.dataset.category;state.currentFilter=cat;$$('.masters-filters .filter-btn').forEach(b=>b.classList.toggle('active',b.dataset.filter===cat));renderMasters();$('#masters').scrollIntoView({behavior:'smooth'})}))}
+
+function initFilterButtons(){$$('.masters-filters .filter-btn').forEach(b=>b.addEventListener('click',()=>{$$('.masters-filters .filter-btn').forEach(x=>x.classList.remove('active'));b.classList.add('active');state.currentFilter=b.dataset.filter;renderMasters()}));$$('.feed-filters .filter-btn').forEach(b=>b.addEventListener('click',()=>{$$('.feed-filters .filter-btn').forEach(x=>x.classList.remove('active'));b.classList.add('active');state.currentFeedFilter=b.dataset.feedFilter;renderFeed()}))}
+
+function renderMasters(){const g=$('#mastersGrid');let f=mastersData;if(state.currentFilter!=='all')f=mastersData.filter(m=>m.category===state.currentFilter);g.innerHTML=f.map(m=>`<div class="master-card" data-master-id="${m.id}"><div class="master-cover"><div class="master-cover-img">${m.emoji}</div>${m.verified?'<div class="master-badge-verified"><i class="fas fa-check"></i></div>':''}${m.top?'<div class="master-badge-top">⭐ ТОП</div>':''}<div class="master-avatar">${m.avatar}</div></div><div class="master-info"><div class="master-name">${m.name}</div><div class="master-specialty">${m.specialty}</div><div class="master-meta"><div class="master-rating"><i class="fas fa-star"></i><span>${m.rating}</span></div><div class="master-reviews-count">${m.reviews} отзывов</div></div><div class="master-location"><i class="fas fa-map-marker-alt"></i>${m.location}</div><div class="master-tags">${m.tags.slice(0,3).map(t=>`<span class="master-tag">${t}</span>`).join('')}</div><div class="master-actions"><button class="btn-primary btn-book" data-master-id="${m.id}"><i class="fas fa-calendar-check"></i> Записаться</button><button class="btn-outline btn-view-master" data-master-id="${m.id}"><i class="fas fa-eye"></i></button></div></div></div>`).join('');g.querySelectorAll('.btn-book').forEach(b=>b.addEventListener('click',e=>{e.stopPropagation();openBookingModal(parseInt(b.dataset.masterId))}));g.querySelectorAll('.btn-view-master').forEach(b=>b.addEventListener('click',e=>{e.stopPropagation();openMasterProfile(parseInt(b.dataset.masterId))}));g.querySelectorAll('.master-card').forEach(c=>c.addEventListener('click',()=>openMasterProfile(parseInt(c.dataset.masterId))))}
+
+function renderFeed(){const g=$('#feedGrid');let f=feedData;if(state.currentFeedFilter==='popular')f=[...feedData].sort((a,b)=>b.likes-a.likes);else if(state.currentFeedFilter==='new')f=[...feedData].reverse();else if(state.currentFeedFilter!=='all')f=feedData.filter(x=>x.category===state.currentFeedFilter);g.innerHTML=f.map(i=>`<div class="feed-item" data-feed-id="${i.id}"><div class="feed-image" style="min-height:${i.height}px">${i.emoji}</div><div class="feed-content"><div class="feed-author"><div class="feed-author-avatar">${i.masterAvatar}</div><div><div class="feed-author-name">${i.masterName}</div><div class="feed-author-time">${i.time}</div></div></div><div class="feed-description">${i.description}</div><div class="feed-stats"><div class="feed-stat ${state.likedFeeds.has(i.id)?'liked':''}" data-feed-like="${i.id}"><i class="fas fa-heart"></i><span>${state.likedFeeds.has(i.id)?i.likes+1:i.likes}</span></div><div class="feed-stat"><i class="fas fa-comment"></i><span>${i.comments}</span></div><div class="feed-stat"><i class="fas fa-share"></i></div></div><div class="feed-tags">${i.tags.map(t=>`<span class="feed-tag">#${t}</span>`).join('')}</div></div></div>`).join('');g.querySelectorAll('[data-feed-like]').forEach(el=>el.addEventListener('click',e=>{e.stopPropagation();const id=parseInt(el.dataset.feedLike);state.likedFeeds.has(id)?state.likedFeeds.delete(id):state.likedFeeds.add(id);renderFeed();showToast(state.likedFeeds.has(id)?'❤️ Понравилось!':'Лайк убран','info')}));g.querySelectorAll('.feed-item').forEach(i=>i.addEventListener('click',()=>openFeedModal(parseInt(i.dataset.feedId))))}
+
+function renderServices(){const l=$('#servicesList');l.innerHTML=popularServices.map(s=>`<div class="service-item"><div class="service-info"><div class="service-icon">${s.icon}</div><div><div class="service-name">${s.name}</div><div class="service-duration">${s.duration}</div></div></div><div class="service-price">${s.price}</div></div>`).join('');l.querySelectorAll('.service-item').forEach(i=>i.addEventListener('click',()=>{showToast(`Ищем мастеров: "${i.querySelector('.service-name').textContent}"`,'info');$('#masters').scrollIntoView({behavior:'smooth'})}))}
+
+function renderNearby(){const l=$('#nearbyList');const s=[...mastersData].sort((a,b)=>parseFloat(a.distance)-parseFloat(b.distance));l.innerHTML=s.map(m=>`<div class="nearby-card" data-master-id="${m.id}"><div class="nearby-avatar">${m.avatar}</div><div class="nearby-info"><div class="nearby-name">${m.name}</div><div class="nearby-specialty">${m.specialty}</div><div class="nearby-distance"><i class="fas fa-map-marker-alt"></i> ${m.distance}</div></div><div class="nearby-rating"><i class="fas fa-star"></i> ${m.rating}</div></div>`).join('');l.querySelectorAll('.nearby-card').forEach(c=>c.addEventListener('click',()=>openMasterProfile(parseInt(c.dataset.masterId))));$('#locateBtn').addEventListener('click',()=>{showToast('📍 Определяем местоположение...','info');setTimeout(()=>showToast('✅ Найдено 6 мастеров рядом!','success'),1500)});$$('.map-pin').forEach(p=>p.addEventListener('click',()=>showToast(`👤 ${p.dataset.master}`,'info')))}
+
+function renderReviews(){const t=$('#reviewsTrack'),d=$('#reviewsDots');t.innerHTML=reviewsData.map(r=>`<div class="review-card"><div class="review-stars">${Array(r.rating).fill('<i class="fas fa-star"></i>').join('')}${Array(5-r.rating).fill('<i class="far fa-star"></i>').join('')}</div><div class="review-text">"${r.text}"</div><div class="review-author"><div class="review-author-avatar">${r.avatar}</div><div><div class="review-author-name">${r.name}</div><div class="review-author-service">${r.service}</div></div></div></div>`).join('');function gpv(){return window.innerWidth<=768?1:window.innerWidth<=1024?2:3}function ud(){const pv=gpv(),td=Math.ceil(reviewsData.length/pv);d.innerHTML=Array(td).fill(0).map((_,i)=>`<div class="review-dot ${i===state.reviewSlide?'active':''}" data-dot="${i}"></div>`).join('');d.querySelectorAll('.review-dot').forEach(dot=>dot.addEventListener('click',()=>{state.reviewSlide=parseInt(dot.dataset.dot);mrs()}))}function mrs(){const pv=gpv(),ms=Math.ceil(reviewsData.length/pv)-1;if(state.reviewSlide>ms)state.reviewSlide=0;if(state.reviewSlide<0)state.reviewSlide=ms;const cw=t.querySelector('.review-card').offsetWidth+24,o=state.reviewSlide*cw*pv;t.style.transform=`translateX(-${o}px)`;ud()}$('#reviewNext').addEventListener('click',()=>{state.reviewSlide++;mrs()});$('#reviewPrev').addEventListener('click',()=>{state.reviewSlide--;mrs()});ud();window.addEventListener('resize',()=>{state.reviewSlide=0;mrs()})}
+
+function initBookingModal(){const m=$('#bookingModal'),c=$('#bookingClose'),n=$('#bookingNext'),b=$('#bookingBack');c.addEventListener('click',()=>closeModal(m));m.addEventListener('click',e=>{if(e.target===m)closeModal(m)});n.addEventListener('click',()=>{if(state.bookingStep===1&&!state.selectedService){showToast('Выберите услугу','error');return}if(state.bookingStep===2&&(!state.selectedDate||!state.selectedTime)){showToast('Выберите дату и время','error');return}if(state.bookingStep===3){const nm=$('#bookingName').value,ph=$('#bookingPhone').value;if(!nm||!ph){showToast('Заполните имя и телефон','error');return}renderBookingSuccess()}if(state.bookingStep<4){state.bookingStep++;updateBookingStep()}});b.addEventListener('click',()=>{if(state.bookingStep>1){state.bookingStep--;updateBookingStep()}})}
+
+function openBookingModal(id){const m=mastersData.find(x=>x.id===id);if(!m)return;state.selectedMaster=m;state.selectedService=null;state.selectedDate=null;state.selectedTime=null;state.bookingStep=1;$('#bookingMasterInfo').innerHTML=`<div class="nearby-avatar">${m.avatar}</div><div><div style="font-weight:600">${m.name}</div><div style="font-size:0.85rem;color:var(--text-secondary)">${m.specialty}</div><div style="font-size:0.8rem;color:var(--accent)"><i class="fas fa-star"></i> ${m.rating}</div></div>`;$('#bookingServices').innerHTML=m.services.map((s,i)=>`<div class="booking-service-item" data-service-index="${i}"><div><div style="font-weight:600;font-size:0.9rem">${s.name}</div><div style="font-size:0.8rem;color:var(--text-muted)">${s.duration}</div></div><div style="font-weight:700;color:var(--primary-light)">${s.price}</div></div>`).join('');$$('.booking-service-item').forEach(i=>i.addEventListener('click',()=>{$$('.booking-service-item').forEach(x=>x.classList.remove('selected'));i.classList.add('selected');state.selectedService=m.services[parseInt(i.dataset.serviceIndex)]}));renderBookingCalendar();updateBookingStep();openModal($('#bookingModal'))}
+
+function renderBookingCalendar(){const c=$('#bookingCalendar'),days=['Вс','Пн','Вт','Ср','Чт','Пт','Сб'],months=['янв','фев','мар','апр','май','июн','июл','авг','сен','окт','ноя','дек'];let h='';const today=new Date();for(let i=0;i<14;i++){const d=new Date(today);d.setDate(today.getDate()+i);h+=`<div class="calendar-day" data-date="${d.toISOString().split('T')[0]}"><div class="day-name">${days[d.getDay()]}</div><div class="day-num">${d.getDate()}</div><div class="day-month">${months[d.getMonth()]}</div></div>`}c.innerHTML=h;c.querySelectorAll('.calendar-day').forEach(d=>d.addEventListener('click',()=>{c.querySelectorAll('.calendar-day').forEach(x=>x.classList.remove('selected'));d.classList.add('selected');state.selectedDate=d.dataset.date;renderTimeSlots()}))}
+
+function renderTimeSlots(){const tc=$('#bookingTimes'),slots=['09:00','10:00','11:00','12:00','13:00','14:00','15:00','16:00','17:00','18:00','19:00','20:00'],un=[2,5,8];tc.innerHTML=slots.map((t,i)=>`<div class="time-slot ${un.includes(i)?'unavailable':''}" data-time="${t}">${t}</div>`).join('');tc.querySelectorAll('.time-slot:not(.unavailable)').forEach(s=>s.addEventListener('click',()=>{tc.querySelectorAll('.time-slot').forEach(x=>x.classList.remove('selected'));s.classList.add('selected');state.selectedTime=s.dataset.time}))}
+
+function updateBookingStep(){$$('.booking-step').forEach(s=>s.classList.toggle('active',parseInt(s.dataset.step)===state.bookingStep));const b=$('#bookingBack'),n=$('#bookingNext'),f=$('#bookingFooter');b.style.display=state.bookingStep>1&&state.bookingStep<4?'':'none';if(state.bookingStep===3){n.innerHTML='<i class="fas fa-check"></i> Подтвердить';renderBookingSummary()}else if(state.bookingStep===4){f.style.display='none'}else{n.innerHTML='Далее <i class="fas fa-arrow-right"></i>';f.style.display=''}}
+
+function renderBookingSummary(){const s=$('#bookingSummary'),m=state.selectedMaster,sv=state.selectedService;s.innerHTML=`<div class="summary-row"><span class="label">Мастер</span><span class="value">${m.name}</span></div><div class="summary-row"><span class="label">Услуга</span><span class="value">${sv.name}</span></div><div class="summary-row"><span class="label">Дата</span><span class="value">${formatDate(state.selectedDate)}</span></div><div class="summary-row"><span class="label">Время</span><span class="value">${state.selectedTime}</span></div><div class="summary-row"><span class="label">Стоимость</span><span class="value" style="color:var(--primary-light)">${sv.price}</span></div>`}
+
+function renderBookingSuccess(){const d=$('#bookingDetails'),m=state.selectedMaster,s=state.selectedService;d.innerHTML=`<div style="background:var(--bg-card);border-radius:var(--radius-md);padding:20px;margin-top:16px;text-align:left"><div class="summary-row"><span class="label">Мастер</span><span class="value">${m.name}</span></div><div class="summary-row"><span class="label">Услуга</span><span class="value">${s.name}</span></div><div class="summary-row"><span class="label">Когда</span><span class="value">${formatDate(state.selectedDate)}, ${state.selectedTime}</span></div><div class="summary-row"><span class="label">Стоимость</span><span class="value" style="color:var(--primary-light)">${s.price}</span></div></div>`;showToast('🎉 Запись создана!','success')}
+
+function initAuthModal(){const m=$('#authModal'),lb=$('#loginBtn'),mlb=$('#mobileLoginBtn'),c=$('#authClose'),bmb=$('#becomeMasterBtn'),bmm=$('#becomeMasterMobile');function oa(){openModal(m)}lb.addEventListener('click',oa);mlb.addEventListener('click',()=>{$('#mobileMenu').classList.remove('active');$('#mobileOverlay').classList.remove('active');document.body.style.overflow='';oa()});c.addEventListener('click',()=>closeModal(m));m.addEventListener('click',e=>{if(e.target===m)closeModal(m)});$$('.auth-tab').forEach(t=>t.addEventListener('click',()=>{$$('.auth-tab').forEach(x=>x.classList.remove('active'));t.classList.add('active');const il=t.dataset.auth==='login';$('#loginForm').classList.toggle('hidden',!il);$('#registerForm').classList.toggle('hidden',il);$('#authTitle').textContent=il?'Вход':'Регистрация'}));$('#loginForm').addEventListener('submit',e=>{e.preventDefault();showToast('✅ Вы вошли!','success');closeModal(m)});$('#registerForm').addEventListener('submit',e=>{e.preventDefault();showToast('✅ Регистрация успешна!','success');closeModal(m)});function obm(){oa();setTimeout(()=>{$$('.auth-tab').forEach(t=>t.classList.remove('active'));$$('.auth-tab')[1].classList.add('active');$('#loginForm').classList.add('hidden');$('#registerForm').classList.remove('hidden');$('#authTitle').textContent='Регистрация'},300)}bmb.addEventListener('click',obm);if(bmm)bmm.addEventListener('click',()=>{$('#mobileMenu').classList.remove('active');$('#mobileOverlay').classList.remove('active');document.body.style.overflow='';obm()})}
+
+function initMasterModal(){const m=$('#masterModal'),c=$('#masterClose');c.addEventListener('click',()=>closeModal(m));m.addEventListener('click',e=>{if(e.target===m)closeModal(m)})}
+
+function openMasterProfile(id){const m=mastersData.find(x=>x.id===id);if(!m)return;const b=$('#masterModalBody');b.innerHTML=`<div class="master-profile"><div class="master-profile-left" style="text-align:center"><div class="master-profile-avatar">${m.avatar}</div><h3 style="font-size:1.3rem;margin-bottom:4px">${m.name}</h3><p style="color:var(--text-secondary);margin-bottom:12px">${m.specialty}</p><div style="display:flex;align-items:center;justify-content:center;gap:16px;margin-bottom:16px"><span style="color:var(--accent)"><i class="fas fa-star"></i> ${m.rating}</span><span style="color:var(--text-muted)">${m.reviews} отзывов</span></div><p style="font-size:0.85rem;color:var(--text-muted);margin-bottom:16px"><i class="fas fa-map-marker-alt" style="color:var(--secondary)"></i> ${m.location}</p><button class="btn-primary btn-block master-profile-book" data-master-id="${m.id}"><i class="fas fa-calendar-check"></i> Записаться</button><h4 style="margin-top:24px;margin-bottom:12px">Работы</h4><div class="master-profile-gallery">${m.gallery.map(e=>`<div class="gallery-item">${e}</div>`).join('')}</div></div><div><h4 style="margin-bottom:16px;font-size:1.1rem">Услуги и цены</h4>${m.services.map(s=>`<div class="service-item" style="margin-bottom:10px"><div><div class="service-name">${s.name}</div><div class="service-duration">${s.duration}</div></div><div class="service-price">${s.price}</div></div>`).join('')}<h4 style="margin-top:24px;margin-bottom:16px">Специализация</h4><div style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:24px">${m.tags.map(t=>`<span class="master-tag" style="padding:6px 14px;font-size:0.8rem">${t}</span>`).join('')}</div><h4 style="margin-bottom:16px">Отзывы</h4><div style="background:var(--bg-card);border-radius:var(--radius-md);padding:16px;margin-bottom:10px"><div style="display:flex;gap:4px;margin-bottom:8px">${Array(5).fill('<i class="fas fa-star" style="color:var(--accent);font-size:0.8rem"></i>').join('')}</div><p style="font-size:0.85rem;color:var(--text-secondary);font-style:italic;margin-bottom:8px">"Отличный мастер! Результат превзошёл ожидания!"</p><span style="font-size:0.75rem;color:var(--text-muted)">— 3 дня назад</span></div></div></div>`;b.querySelector('.master-profile-book').addEventListener('click',()=>{closeModal($('#masterModal'));setTimeout(()=>openBookingModal(m.id),300)});openModal($('#masterModal'))}
+
+function initFeedModal(){const m=$('#feedModal'),c=$('#feedClose');c.addEventListener('click',()=>closeModal(m));m.addEventListener('click',e=>{if(e.target===m)closeModal(m)})}
+
+function openFeedModal(id){const i=feedData.find(x=>x.id===id);if(!i)return;const b=$('#feedModalBody');b.innerHTML=`<div class="feed-modal-image">${i.emoji}</div><div class="feed-modal-content"><div class="feed-author" style="margin-bottom:16px"><div class="feed-author-avatar">${i.masterAvatar}</div><div><div class="feed-author-name">${i.masterName}</div><div class="feed-author-time">${i.time}</div></div></div><p style="margin-bottom:16px;line-height:1.7">${i.description}</p><div class="feed-stats" style="margin-bottom:16px;padding-bottom:16px;border-bottom:1px solid var(--border)"><div class="feed-stat ${state.likedFeeds.has(i.id)?'liked':''}"><i class="fas fa-heart"></i><span>${state.likedFeeds.has(i.id)?i.likes+1:i.likes}</span></div><div class="feed-stat"><i class="fas fa-comment"></i><span>${i.comments}</span></div></div><div class="feed-tags" style="margin-bottom:20px">${i.tags.map(t=>`<span class="feed-tag">#${t}</span>`).join('')}</div><div class="feed-modal-comments"><h4 style="font-size:1rem;margin-bottom:12px">Комментарии</h4><div class="comment-item"><div class="comment-avatar">А</div><div><div class="comment-text"><span class="comment-name">Алена</span>Невероятно красиво! 😍</div><div class="comment-time">2 часа назад</div></div></div><div class="comment-item"><div class="comment-avatar">М</div><div><div class="comment-text"><span class="comment-name">Марина</span>Сколько стоит?</div><div class="comment-time">3 часа назад</div></div></div><div style="margin-top:16px;display:flex;gap:8px"><input type="text" placeholder="Комментарий..." class="form-input" style="margin:0;flex:1"><button class="btn-primary" style="padding:12px 16px"><i class="fas fa-paper-plane"></i></button></div></div></div>`;openModal($('#feedModal'))}
+
+function openModal(m){m.classList.add('active');document.body.style.overflow='hidden'}
+function closeModal(m){m.classList.remove('active');document.body.style.overflow=''}
+
+function initScrollAnimations(){const els=$$('.category-card,.master-card,.step-card,.service-item,.feed-item,.nearby-card');els.forEach(el=>el.classList.add('animate-on-scroll'));const obs=new IntersectionObserver((entries)=>{entries.forEach((entry,i)=>{if(entry.isIntersecting){setTimeout(()=>entry.target.classList.add('animated'),i*50);obs.unobserve(entry.target)}})},{threshold:0.1,rootMargin:'0px 0px -50px 0px'});els.forEach(el=>obs.observe(el))}
+
+function initCounters(){const counters=$$('.stat-number[data-count]');const obs=new IntersectionObserver(entries=>{entries.forEach(entry=>{if(entry.isIntersecting){animateCounter(entry.target);obs.unobserve(entry.target)}})},{threshold:0.5});counters.forEach(c=>obs.observe(c))}
+
+function animateCounter(el){const target=parseInt(el.dataset.count),duration=2000,start=performance.now();function update(now){const elapsed=now-start,progress=Math.min(elapsed/duration,1),eased=1-Math.pow(1-progress,3),current=Math.floor(eased*target);el.textContent=current.toLocaleString()+(target>=1000?'+':'%');if(progress<1)requestAnimationFrame(update)}requestAnimationFrame(update)}
+
+function initScrollTop(){const b=$('#scrollTop');window.addEventListener('scroll',()=>b.classList.toggle('visible',window.scrollY>500));b.addEventListener('click',()=>window.scrollTo({top:0,behavior:'smooth'}))}
+
+function showToast(message,type='info'){const c=$('#toastContainer'),icons={success:'fa-check-circle',error:'fa-exclamation-circle',info:'fa-info-circle'},t=document.createElement('div');t.className=`toast ${type}`;t.innerHTML=`<i class="fas ${icons[type]}"></i><span>${message}</span>`;c.appendChild(t);setTimeout(()=>{t.classList.add('removing');setTimeout(()=>t.remove(),300)},3000)}
+
+function formatDate(ds){if(!ds)return'';const d=new Date(ds),months=['января','февраля','марта','апреля','мая','июня','июля','августа','сентября','октября','ноября','декабря'],days=['воскресенье','понедельник','вторник','среда','четверг','пятница','суббота'];return`${d.getDate()} ${months[d.getMonth()]}, ${days[d.getDay()]}`}
+
+const lmb=$('#loadMoreMasters');if(lmb)lmb.addEventListener('click',()=>showToast('Загружаем...','info'));
+const lfb=$('#loadMoreFeed');if(lfb)lfb.addEventListener('click',()=>showToast('Загружаем...','info'));
+})();
+</script>
+</body>
+</html>
