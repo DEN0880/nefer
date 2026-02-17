@@ -667,11 +667,17 @@ textarea.finp{min-height:60px;resize:vertical}
 ::-webkit-scrollbar-thumb:hover{background:var(--orchid)}
 ::selection{background:rgba(157,107,224,.3);color:#fff}
    .hero-photo{
-  position:absolute;inset:0;
-  background:url('https://raw.githubusercontent.com/DEN0880/nefer/main/hero.png') center/cover no-repeat;
-  opacity:.6;
+  position:absolute;
+  inset:-20px;
+  background:url('https://raw.githubusercontent.com/DEN0880/nefer/main/hero.png') center center no-repeat;
+  background-size:contain;
+  opacity:.45;
   filter:saturate(0.7) brightness(0.8);
   animation:heroZoom 30s ease-in-out infinite alternate;
+}
+@keyframes heroZoom{
+  0%{transform:scale(1)}
+  100%{transform:scale(1.05)}
 }
 .hero-fade{
   position:absolute;inset:0;
@@ -1202,6 +1208,7 @@ rFL();rM();rF();
 </body>
 
 </html>
+
 
 
 
