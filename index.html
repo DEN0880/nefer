@@ -666,6 +666,30 @@ textarea.finp{min-height:60px;resize:vertical}
 ::-webkit-scrollbar-thumb{background:var(--plum-mid);border-radius:3px}
 ::-webkit-scrollbar-thumb:hover{background:var(--orchid)}
 ::selection{background:rgba(157,107,224,.3);color:#fff}
+   .hero-photo{
+  position:absolute;inset:0;
+  background:url('https://raw.githubusercontent.com/DEN0880/nefer/main/hero.png') center/cover no-repeat;
+  opacity:.2;
+  filter:saturate(0.5) brightness(0.7);
+  animation:heroZoom 30s ease-in-out infinite alternate;
+}
+@keyframes heroZoom{0%{transform:scale(1)}100%{transform:scale(1.1)}}
+.hero-fade{
+  position:absolute;inset:0;
+  background:
+    linear-gradient(180deg,var(--plum-dark) 0%,rgba(14,8,24,.4) 30%,rgba(14,8,24,.15) 50%,rgba(14,8,24,.5) 75%,var(--plum-dark) 100%),
+    linear-gradient(90deg,var(--plum-dark) 0%,transparent 25%,transparent 75%,var(--plum-dark) 100%);
+}
+.hero-glow{
+  position:absolute;inset:0;
+  background:
+    radial-gradient(ellipse at 25% 40%,rgba(157,107,224,.15) 0%,transparent 55%),
+    radial-gradient(ellipse at 75% 60%,rgba(232,86,127,.1) 0%,transparent 55%);
+}
+.hero-vignette{
+  position:absolute;inset:0;
+  background:radial-gradient(ellipse at center,transparent 40%,rgba(14,8,24,.6) 100%);
+}
 </style>
 </head>
 <body>
@@ -725,7 +749,12 @@ textarea.finp{min-height:60px;resize:vertical}
 
 <!-- Hero -->
 <section class="hero" id="home">
-<div class="hero-bg"></div>
+<div class="hero-bg">
+  <div class="hero-photo"></div>
+  <div class="hero-fade"></div>
+  <div class="hero-glow"></div>
+  <div class="hero-vignette"></div>
+</div>
 <div class="w">
 <div class="hero-content">
   <div class="hero-badge"><span>Маркетплейс красоты нового поколения</span></div>
@@ -1172,4 +1201,5 @@ $('#hsb').onclick=function(){var v=$('#hsi').value;if(v){T('Ищем: «'+v+'»'
 rFL();rM();rF();
 </script>
 </body>
+
 </html>
